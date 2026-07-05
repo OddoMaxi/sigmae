@@ -1,0 +1,18 @@
+{
+  "dependencies_to_add": [
+    "axios",
+    "zustand",
+    "react-hook-form",
+    "@hookform/resolvers",
+    "zod",
+    "recharts",
+    "date-fns",
+    "@tanstack/react-query",
+    "react-hot-toast",
+    "lucide-react",
+    "html5-qrcode"
+  ],
+  "devDependencies_to_add": [
+    "shadcn-ui"
+  ]
+}
