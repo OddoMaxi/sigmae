@@ -18,9 +18,12 @@ class AnomaliePolicy
             return false;
         }
 
-        // Agents ambassade : seulement les anomalies de leurs lots
+        // Agents ambassade : seulement les anomalies concernant leur ambassade
+        // (via le lot si déjà constitué, sinon via l'ambassade de destination du passeport)
         if ($user->isScopedToAmbassade()) {
-            return $anomalie->lot?->ambassade_id === $user->ambassade_id;
+            $ambassadeId = $anomalie->lot?->ambassade_id ?? $anomalie->passeport?->ambassade_destination_id;
+
+            return $ambassadeId === $user->ambassade_id;
         }
 
         return true;

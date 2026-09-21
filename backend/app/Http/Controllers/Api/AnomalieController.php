@@ -18,9 +18,14 @@ class AnomalieController extends Controller
         $user = $request->user();
 
         $anomalies = Anomalie::with(['passeport', 'lot.ambassade', 'signalePar'])
-            ->when($user->isScopedToAmbassade(), fn ($q) => $q->whereHas(
-                'lot', fn ($q2) => $q2->where('ambassade_id', $user->ambassade_id)
-            ))
+            ->when($user->isScopedToAmbassade(), fn ($q) => $q->where(function ($q2) use ($user) {
+                // Anomalie liée à un lot de son ambassade...
+                $q2->whereHas('lot', fn ($q3) => $q3->where('ambassade_id', $user->ambassade_id))
+                    // ...ou à un passeport pas encore en lot mais destiné à son ambassade
+                    ->orWhere(fn ($q3) => $q3->whereNull('lot_id')->whereHas(
+                        'passeport', fn ($q4) => $q4->where('ambassade_destination_id', $user->ambassade_id)
+                    ));
+            }))
             ->when($request->statut, fn($q) => $q->where('statut', $request->statut))
             ->when($request->type, fn($q) => $q->where('type', $request->type))
             ->when($request->ambassade_id, fn($q) => $q->whereHas(
