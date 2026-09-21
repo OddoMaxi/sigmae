@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-sgpge}
+      POSTGRES_USER: ${DB_USERNAME:-sgpge_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-sgpge_user} -d ${DB_DATABASE:-sgpge}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [sgpge]
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    env_file: ./backend/.env.production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - backend_storage:/var/www/storage/app
+    networks: [sgpge]
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    restart: unless-stopped
+    networks: [sgpge]
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [backend, frontend]
+    networks: [sgpge]
+
+networks:
+  sgpge:
+
+volumes:
+  postgres_data:
+  backend_storage:
+  caddy_data:
+  caddy_config:
