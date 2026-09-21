@@ -120,11 +120,13 @@ class AuthSeeder extends Seeder
         'agent_enrolement' => [
             'ambassades.view', 'pays.view',
             'passeports.view', 'passeports.create',
+            'enrolement.view', 'enrolement.create',
         ],
 
         'agent_impression' => [
             'ambassades.view', 'pays.view',
             'passeports.view', 'passeports.create',
+            'enrolement.view', 'enrolement.assign_numero',
         ],
 
         'agent_reception' => [
