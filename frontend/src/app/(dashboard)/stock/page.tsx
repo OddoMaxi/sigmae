@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import api from '@/lib/api'
 import { Search, Download, AlertTriangle, Package, Archive } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import { downloadFile } from '@/lib/download'
 
 const STATUTS_STOCK = ['', 'en_stock', 'en_lot', 'expedie', 'anomalie']
 
@@ -71,11 +72,11 @@ function InventaireSection() {
             { k: 'en_lot',   label: 'En lot',    color: 'text-blue-600' },
             { k: 'expedie',  label: 'Expédiés',  color: 'text-yellow-600' },
             { k: 'anomalie', label: 'Anomalies', color: 'text-red-600' },
-            { k: 'total',    label: 'Total',     color: 'text-gray-700' },
+            { k: 'total',    label: 'Total',     color: 'text-slate-700' },
           ].map(({ k, label, color }) => (
             <div key={k} className="bg-white rounded-xl border p-3 text-center">
               <p className={`text-2xl font-bold ${color}`}>{data.totaux[k] ?? 0}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{label}</p>
             </div>
           ))}
         </div>
@@ -85,29 +86,29 @@ function InventaireSection() {
       <div className="bg-white rounded-xl border overflow-hidden">
         <div className="px-5 py-3 border-b flex items-center gap-2">
           <Archive size={15} className="text-[#1a5276]" />
-          <h3 className="font-semibold text-sm text-gray-800">Inventaire par ambassade</h3>
+          <h3 className="font-semibold text-sm text-slate-800">Inventaire par ambassade</h3>
         </div>
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-gray-50 border-b">
+            <tr className="bg-slate-50 border-b">
               {['Ambassade', 'Pays', 'En stock', 'En lot', 'Expédiés', 'Anomalies', 'Total'].map(h => (
-                <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
+                <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {data?.ambassades?.map((row: any) => (
-              <tr key={row.ambassade.id} className={`border-b hover:bg-gray-50 ${row.alerte ? 'bg-amber-50/40' : ''}`}>
+              <tr key={row.ambassade.id} className={`border-b hover:bg-slate-50 ${row.alerte ? 'bg-amber-50/40' : ''}`}>
                 <td className="px-4 py-2.5">
                   <div className="flex items-center gap-2">
                     {row.alerte && <AlertTriangle size={12} className="text-amber-500 shrink-0" />}
                     <div>
-                      <p className="font-medium text-gray-800 text-xs">{row.ambassade.nom}</p>
-                      <p className="text-gray-400 text-xs">{row.ambassade.ville}</p>
+                      <p className="font-medium text-slate-800 text-xs">{row.ambassade.nom}</p>
+                      <p className="text-slate-400 text-xs">{row.ambassade.ville}</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-2.5 text-xs text-gray-500">{row.ambassade.pays?.nom}</td>
+                <td className="px-4 py-2.5 text-xs text-slate-500">{row.ambassade.pays?.nom}</td>
                 <td className="px-4 py-2.5 text-center">
                   <span className={`text-xs font-bold ${row.en_stock >= 100 ? 'text-amber-600' : 'text-green-600'}`}>
                     {row.en_stock}
@@ -116,7 +117,7 @@ function InventaireSection() {
                 <td className="px-4 py-2.5 text-center text-xs text-blue-600 font-medium">{row.en_lot}</td>
                 <td className="px-4 py-2.5 text-center text-xs text-yellow-700 font-medium">{row.expedie}</td>
                 <td className="px-4 py-2.5 text-center text-xs text-red-600 font-medium">{row.anomalie}</td>
-                <td className="px-4 py-2.5 text-center text-xs font-bold text-gray-700">{row.total}</td>
+                <td className="px-4 py-2.5 text-center text-xs font-bold text-slate-700">{row.total}</td>
               </tr>
             ))}
           </tbody>
@@ -134,8 +135,6 @@ export default function StockPage() {
   const [page,      setPage]      = useState(1)
   const [tab,       setTab]       = useState<'liste' | 'inventaire'>('liste')
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
-
   const { data, isLoading } = useQuery({
     queryKey: ['stock-central', search, statut, page],
     queryFn:  () => api.get('/stock-central', { params: { search, statut, page, per_page: 50 } }).then(r => r.data),
@@ -148,25 +147,24 @@ export default function StockPage() {
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Stock Central</h1>
-          <p className="text-sm text-gray-500">Passeports en stock, en lot, expédiés et en anomalie</p>
+          <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Stock Central</h1>
+          <p className="text-sm text-slate-500">Passeports en stock, en lot, expédiés et en anomalie</p>
         </div>
-        <a
-          href={`${apiUrl}/stock-central/export?format=xlsx${statut ? `&statut=${statut}` : ''}${search ? `&search=${search}` : ''}`}
-          target="_blank"
-          className="flex items-center gap-2 border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-50">
+        <button
+          onClick={() => downloadFile('/stock-central/export', { format: 'xlsx', statut, search }, 'stock_central.xlsx')}
+          className="flex items-center gap-2 border border-slate-300 text-slate-600 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
           <Download size={15} /> Export Excel
-        </a>
+        </button>
       </div>
 
       {/* Onglets */}
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+      <div className="flex gap-1 bg-slate-100 rounded-lg p-1 w-fit">
         {([['liste', 'Liste passeports'], ['inventaire', 'Inventaire ambassades']] as [string, string][]).map(([t, l]) => (
           <button
             key={t}
             onClick={() => setTab(t as any)}
             className={`px-4 py-1.5 text-sm rounded-md font-medium transition ${
-              tab === t ? 'bg-white shadow text-[#1a5276]' : 'text-gray-500 hover:text-gray-700'
+              tab === t ? 'bg-white shadow text-[#1a5276]' : 'text-slate-500 hover:text-slate-700'
             }`}>
             {l}
           </button>
@@ -180,7 +178,7 @@ export default function StockPage() {
           {/* Filtres */}
           <div className="bg-white rounded-xl shadow-sm border p-4 flex flex-wrap gap-3">
             <div className="flex-1 min-w-[200px] relative">
-              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1) }}
@@ -208,48 +206,48 @@ export default function StockPage() {
               <>
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-gray-50 border-b">
+                    <tr className="bg-slate-50 border-b">
                       {['N° Passeport', 'Titulaire', 'Ambassade', 'Pays', 'Statut', 'Lot', 'Réception MAE'].map(h => (
-                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
+                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {data?.data?.length === 0 && (
                       <tr>
-                        <td colSpan={7} className="text-center py-12 text-gray-400">
+                        <td colSpan={7} className="text-center py-12 text-slate-400">
                           <Package size={32} className="mx-auto mb-2 opacity-40" />
                           Aucun passeport trouvé
                         </td>
                       </tr>
                     )}
                     {data?.data?.map((p: any) => (
-                      <tr key={p.id} className="border-b hover:bg-gray-50 transition">
+                      <tr key={p.id} className="border-b hover:bg-slate-50 transition">
                         <td className="px-4 py-3 font-mono font-bold text-[#1a5276] text-xs">{p.numero}</td>
                         <td className="px-4 py-3">
-                          <p className="font-medium text-gray-800 text-xs">{p.nom_titulaire} {p.prenom_titulaire}</p>
-                          <p className="text-gray-400 text-xs">{p.email_citoyen ?? '—'}</p>
+                          <p className="font-medium text-slate-800 text-xs">{p.nom_titulaire} {p.prenom_titulaire}</p>
+                          <p className="text-slate-400 text-xs">{p.email_citoyen ?? '—'}</p>
                         </td>
-                        <td className="px-4 py-3 text-xs text-gray-600">
+                        <td className="px-4 py-3 text-xs text-slate-600">
                           {p.ambassade_destination?.nom ?? '—'}
                           {p.ambassade_destination?.ville && (
-                            <p className="text-gray-400">{p.ambassade_destination.ville}</p>
+                            <p className="text-slate-400">{p.ambassade_destination.ville}</p>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-xs text-gray-500">
+                        <td className="px-4 py-3 text-xs text-slate-500">
                           {p.pays_destination?.nom ?? '—'}
                         </td>
                         <td className="px-4 py-3">
-                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statutStyle[p.statut] ?? 'bg-gray-100 text-gray-600'}`}>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statutStyle[p.statut] ?? 'bg-slate-100 text-slate-600'}`}>
                             {statutLabel[p.statut] ?? p.statut}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-xs text-gray-500">
+                        <td className="px-4 py-3 text-xs text-slate-500">
                           {p.lot ? (
                             <span className="font-mono text-[#1a5276]">{p.lot.reference}</span>
                           ) : '—'}
                         </td>
-                        <td className="px-4 py-3 text-xs text-gray-500">
+                        <td className="px-4 py-3 text-xs text-slate-500">
                           {formatDate(p.date_reception_mae)}
                         </td>
                       </tr>
@@ -260,16 +258,16 @@ export default function StockPage() {
                 {/* Pagination */}
                 {(data?.last_page ?? 1) > 1 && (
                   <div className="flex items-center justify-between px-4 py-3 border-t">
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-slate-500">
                       {data.from}–{data.to} sur {data.total} passeports
                     </p>
                     <div className="flex gap-2">
                       <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                        className="px-3 py-1 text-xs border rounded hover:bg-gray-50 disabled:opacity-40">
+                        className="px-3 py-1 text-xs border rounded hover:bg-slate-50 disabled:opacity-40">
                         Précédent
                       </button>
                       <button onClick={() => setPage(p => Math.min(data.last_page, p + 1))} disabled={page === data.last_page}
-                        className="px-3 py-1 text-xs border rounded hover:bg-gray-50 disabled:opacity-40">
+                        className="px-3 py-1 text-xs border rounded hover:bg-slate-50 disabled:opacity-40">
                         Suivant
                       </button>
                     </div>

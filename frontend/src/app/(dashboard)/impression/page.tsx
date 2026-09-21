@@ -117,17 +117,17 @@ export default function ImpressionPage() {
       {/* ── En-tête ──────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight flex items-center gap-2">
             <Printer className="text-[#1a5276]" size={26} />
             Unité d'impression
           </h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <p className="text-sm text-slate-500 mt-0.5">
             Assignation des numéros de passeport aux dossiers enrôlés
           </p>
         </div>
         <div className="text-right">
           <p className="text-2xl font-bold text-[#1a5276]">{pending.length}</p>
-          <p className="text-xs text-gray-500">dossier{pending.length > 1 ? 's' : ''} en attente</p>
+          <p className="text-xs text-slate-500">dossier{pending.length > 1 ? 's' : ''} en attente</p>
         </div>
       </div>
 
@@ -137,8 +137,8 @@ export default function ImpressionPage() {
         <div className="col-span-3 space-y-4">
 
           {/* Saisie référence demande */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <h3 className="font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
+            <h3 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
               <Search size={16} className="text-[#1a5276]" />
               Rechercher le dossier
             </h3>
@@ -149,7 +149,7 @@ export default function ImpressionPage() {
                 onChange={e => { setRefInput(e.target.value); setSearchError('') }}
                 onKeyDown={e => e.key === 'Enter' && searchDossier(refInput)}
                 placeholder="DEM-FRPAR-20260601-X7K2P"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+                className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
               />
               <button
                 onClick={() => searchDossier(refInput)}
@@ -175,30 +175,30 @@ export default function ImpressionPage() {
                 </h3>
                 <button
                   onClick={() => { setDossier(null); setDossierId(null); setRefInput(''); setNumeroInput(''); refInputRef.current?.focus() }}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-slate-400 hover:text-slate-600"
                 >
                   <X size={16} />
                 </button>
               </div>
 
               {/* Infos titulaire */}
-              <div className="bg-gray-50 rounded-lg p-4 grid grid-cols-2 gap-3 text-sm">
-                <div className="flex items-center gap-2 text-gray-700">
-                  <User size={14} className="text-gray-400 shrink-0" />
+              <div className="bg-slate-50 rounded-lg p-4 grid grid-cols-2 gap-3 text-sm">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <User size={14} className="text-slate-400 shrink-0" />
                   <span className="font-semibold">
                     {dossier.prenom_titulaire} {dossier.nom_titulaire}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-500">
-                  <Calendar size={14} className="text-gray-400 shrink-0" />
+                <div className="flex items-center gap-2 text-slate-500">
+                  <Calendar size={14} className="text-slate-400 shrink-0" />
                   {dossier.date_naissance
                     ? new Date(dossier.date_naissance).toLocaleDateString('fr-FR')
                     : '—'}
                 </div>
-                <div className="flex items-center gap-2 text-gray-500 col-span-2">
-                  <Building2 size={14} className="text-gray-400 shrink-0" />
+                <div className="flex items-center gap-2 text-slate-500 col-span-2">
+                  <Building2 size={14} className="text-slate-400 shrink-0" />
                   {dossier.ambassade_destination?.nom ?? '—'}
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-slate-400">
                     ({dossier.ambassade_destination?.code})
                   </span>
                 </div>
@@ -211,7 +211,7 @@ export default function ImpressionPage() {
 
               {/* Saisie numéro passeport */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                <label className="block text-xs font-medium text-slate-600 mb-1.5">
                   <Hash size={12} className="inline mr-1" />
                   Numéro de passeport imprimé *
                 </label>
@@ -222,7 +222,7 @@ export default function ImpressionPage() {
                     onChange={e => setNumeroInput(e.target.value.toUpperCase())}
                     onKeyDown={e => e.key === 'Enter' && handleAssigner()}
                     placeholder="PA123456"
-                    className="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-sm font-mono font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+                    className="flex-1 border border-slate-200 rounded-lg px-3 py-2.5 text-sm font-mono font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
                   />
                   <button
                     onClick={handleAssigner}
@@ -233,7 +233,7 @@ export default function ImpressionPage() {
                     {assigner.isPending ? 'Assignation...' : 'Confirmer'}
                   </button>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-slate-400 mt-1">
                   Appuyez sur Entrée pour confirmer rapidement.
                 </p>
               </div>
@@ -242,7 +242,7 @@ export default function ImpressionPage() {
 
           {/* État vide — pas de dossier sélectionné */}
           {!dossier && !searchError && (
-            <div className="bg-gray-50 rounded-xl border border-dashed border-gray-200 p-8 text-center text-gray-400">
+            <div className="bg-slate-50 rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-400">
               <Printer size={36} className="mx-auto mb-3 opacity-30" />
               <p className="text-sm">Saisissez une référence demande ou cliquez sur un dossier dans la file d'attente.</p>
             </div>
@@ -251,12 +251,12 @@ export default function ImpressionPage() {
 
         {/* ── Colonne droite : file d'attente ───────────────────────── */}
         <div className="col-span-2">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="px-4 py-3 border-b bg-gray-50 flex items-center justify-between">
-              <span className="text-sm font-semibold text-gray-700">File d'attente</span>
+          <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 overflow-hidden">
+            <div className="px-4 py-3 border-b bg-slate-50 flex items-center justify-between">
+              <span className="text-sm font-semibold text-slate-700">File d'attente</span>
               <button
                 onClick={() => qc.invalidateQueries({ queryKey: ['enrolements-impression'] })}
-                className="text-gray-400 hover:text-gray-600 transition"
+                className="text-slate-400 hover:text-slate-600 transition"
                 title="Actualiser"
               >
                 <RefreshCw size={14} />
@@ -268,7 +268,7 @@ export default function ImpressionPage() {
                 <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#1a5276] border-t-transparent" />
               </div>
             ) : pending.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-40 text-gray-400">
+              <div className="flex flex-col items-center justify-center h-40 text-slate-400">
                 <Check size={28} className="mb-2 text-green-400" />
                 <p className="text-sm">Aucun dossier en attente</p>
               </div>
@@ -282,13 +282,13 @@ export default function ImpressionPage() {
                       dossierId === e.id ? 'bg-[#1a5276]/5 border-l-2 border-[#1a5276]' : ''
                     }`}
                   >
-                    <p className="font-medium text-sm text-gray-800">
+                    <p className="font-medium text-sm text-slate-800">
                       {e.prenom_titulaire} {e.nom_titulaire}
                     </p>
                     <p className="text-xs font-mono text-[#1a5276] mt-0.5">
                       {e.reference_demande}
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-slate-400 mt-0.5">
                       {e.ambassade_destination?.code ?? '—'} ·{' '}
                       {e.enrolled_at
                         ? new Date(e.enrolled_at).toLocaleDateString('fr-FR')

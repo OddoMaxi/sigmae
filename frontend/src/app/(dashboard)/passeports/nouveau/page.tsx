@@ -31,14 +31,14 @@ type FormData = z.infer<typeof schema>
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+      <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
       {children}
       {error && <p className="text-red-500 text-xs mt-0.5">{error}</p>}
     </div>
   )
 }
 
-const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]'
+const inputCls = 'w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]'
 
 // ── Page ───────────────────────────────────────────────────────────────────
 
@@ -85,22 +85,22 @@ export default function NouveauPasseportPage() {
 
       {/* ── En-tête ──────────────────────────────────────────────────── */}
       <div className="flex items-center gap-3">
-        <Link href="/passeports" className="text-gray-400 hover:text-gray-600 transition">
+        <Link href="/passeports" className="text-slate-400 hover:text-slate-600 transition">
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Nouveau passeport</h1>
-          <p className="text-sm text-gray-500">Saisie manuelle depuis l'imprimerie (MAE)</p>
+          <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Nouveau passeport</h1>
+          <p className="text-sm text-slate-500">Saisie manuelle depuis l'imprimerie (MAE)</p>
         </div>
       </div>
 
       {/* ── Formulaire ──────────────────────────────────────────────── */}
       <form onSubmit={handleSubmit((d) => save.mutate(d))}
-        className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
+        className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-6 space-y-6">
 
         {/* Identification */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b">Identification du passeport</h3>
+          <h3 className="text-sm font-semibold text-slate-700 mb-4 pb-2 border-b">Identification du passeport</h3>
           <div className="grid grid-cols-2 gap-4">
             <Field label="N° Passeport *" error={errors.numero?.message}>
               <input {...register('numero')} placeholder="PA123456" className={inputCls} />
@@ -117,7 +117,7 @@ export default function NouveauPasseportPage() {
 
         {/* Titulaire */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b">Titulaire</h3>
+          <h3 className="text-sm font-semibold text-slate-700 mb-4 pb-2 border-b">Titulaire</h3>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Prénom *" error={errors.prenom_titulaire?.message}>
               <input {...register('prenom_titulaire')} placeholder="Alpha" className={inputCls} />
@@ -141,7 +141,7 @@ export default function NouveauPasseportPage() {
 
         {/* Destination */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b">Destination</h3>
+          <h3 className="text-sm font-semibold text-slate-700 mb-4 pb-2 border-b">Destination</h3>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Ambassade destination *" error={errors.ambassade_destination_id?.message}>
               <select
@@ -167,9 +167,9 @@ export default function NouveauPasseportPage() {
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-2 border-t border-gray-100">
+        <div className="flex justify-end gap-3 pt-2 border-t border-slate-100">
           <Link href="/passeports"
-            className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
+            className="px-4 py-2 text-sm border rounded-lg hover:bg-slate-50">
             Annuler
           </Link>
           <button type="submit" disabled={isSubmitting}

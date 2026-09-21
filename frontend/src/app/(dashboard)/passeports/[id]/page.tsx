@@ -27,7 +27,7 @@ const STATUT_LABELS: Record<string, string> = {
 
 const statutStyle: Record<string, string> = {
   enrolee:            'bg-violet-100 text-violet-700 border-violet-200',
-  imprime:            'bg-gray-100 text-gray-600 border-gray-200',
+  imprime:            'bg-slate-100 text-slate-600 border-slate-200',
   recu_mae:           'bg-blue-100 text-blue-700 border-blue-200',
   en_stock:           'bg-indigo-100 text-indigo-700 border-indigo-200',
   en_lot:             'bg-yellow-100 text-yellow-800 border-yellow-200',
@@ -42,8 +42,8 @@ const statutStyle: Record<string, string> = {
 function Field({ label, value }: { label: string; value?: string | null }) {
   return (
     <div>
-      <p className="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{label}</p>
-      <p className="text-sm font-medium text-gray-800">{value || <span className="text-gray-300">—</span>}</p>
+      <p className="text-xs text-slate-400 uppercase tracking-wide mb-0.5">{label}</p>
+      <p className="text-sm font-medium text-slate-800">{value || <span className="text-slate-300">—</span>}</p>
     </div>
   )
 }
@@ -97,7 +97,7 @@ export default function PasseportDetailPage() {
     return (
       <div className="text-center py-16">
         <AlertTriangle size={40} className="mx-auto text-red-400 mb-3" />
-        <p className="text-gray-500">Passeport introuvable.</p>
+        <p className="text-slate-500">Passeport introuvable.</p>
         <Link href="/passeports" className="mt-4 inline-block text-sm text-[#1a5276] hover:underline">
           Retour à la liste
         </Link>
@@ -113,22 +113,22 @@ export default function PasseportDetailPage() {
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <Link href="/passeports"
-            className="text-gray-400 hover:text-gray-600 transition">
+            className="text-slate-400 hover:text-slate-600 transition">
             <ArrowLeft size={20} />
           </Link>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-800">
+              <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">
                 {passeport.numero
                   ? <span className="font-mono">{passeport.numero}</span>
                   : <span className="text-violet-600 font-mono text-lg">{passeport.reference_demande ?? '—'}</span>
                 }
               </h1>
-              <span className={`text-xs px-2.5 py-1 rounded-full font-medium border ${statutStyle[statut] ?? 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+              <span className={`text-xs px-2.5 py-1 rounded-full font-medium border ${statutStyle[statut] ?? 'bg-slate-100 text-slate-600 border-slate-200'}`}>
                 {STATUT_LABELS[statut] ?? statut}
               </span>
             </div>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-slate-500 mt-0.5">
               {passeport.prenom_titulaire} {passeport.nom_titulaire}
             </p>
           </div>
@@ -196,10 +196,10 @@ export default function PasseportDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Titulaire */}
         <div className="md:col-span-2 space-y-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
             <div className="flex items-center gap-2 mb-4">
               <User size={16} className="text-[#1a5276]" />
-              <h2 className="font-semibold text-gray-700 text-sm">Titulaire</h2>
+              <h2 className="font-semibold text-slate-700 text-sm">Titulaire</h2>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Prénom" value={passeport.prenom_titulaire} />
@@ -215,10 +215,10 @@ export default function PasseportDetailPage() {
           </div>
 
           {/* Destination */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
             <div className="flex items-center gap-2 mb-4">
               <MapPin size={16} className="text-[#1a5276]" />
-              <h2 className="font-semibold text-gray-700 text-sm">Destination</h2>
+              <h2 className="font-semibold text-slate-700 text-sm">Destination</h2>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Pays"
@@ -236,10 +236,10 @@ export default function PasseportDetailPage() {
 
           {/* Lot */}
           {passeport.lot && (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Package size={16} className="text-[#1a5276]" />
-                <h2 className="font-semibold text-gray-700 text-sm">Lot d'expédition</h2>
+                <h2 className="font-semibold text-slate-700 text-sm">Lot d'expédition</h2>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Référence lot" value={passeport.lot.reference} />
@@ -254,26 +254,26 @@ export default function PasseportDetailPage() {
 
         {/* Dates & Statut */}
         <div className="space-y-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
             <div className="flex items-center gap-2 mb-4">
               <Calendar size={16} className="text-[#1a5276]" />
-              <h2 className="font-semibold text-gray-700 text-sm">Dates clés</h2>
+              <h2 className="font-semibold text-slate-700 text-sm">Dates clés</h2>
             </div>
             <div className="space-y-3">
               {passeport.enrolled_at && (
                 <div className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-violet-400 mt-1.5 shrink-0" />
                   <div>
-                    <p className="text-xs text-gray-400">Enrôlement</p>
+                    <p className="text-xs text-slate-400">Enrôlement</p>
                     <p className="text-xs font-medium">{new Date(passeport.enrolled_at).toLocaleDateString('fr-FR')}</p>
                   </div>
                 </div>
               )}
               {passeport.date_impression && (
                 <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-1.5 shrink-0" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 shrink-0" />
                   <div>
-                    <p className="text-xs text-gray-400">Impression</p>
+                    <p className="text-xs text-slate-400">Impression</p>
                     <p className="text-xs font-medium">{new Date(passeport.date_impression).toLocaleDateString('fr-FR')}</p>
                   </div>
                 </div>
@@ -282,7 +282,7 @@ export default function PasseportDetailPage() {
                 <div className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0" />
                   <div>
-                    <p className="text-xs text-gray-400">Réception MAE</p>
+                    <p className="text-xs text-slate-400">Réception MAE</p>
                     <p className="text-xs font-medium">{new Date(passeport.date_reception_mae).toLocaleDateString('fr-FR')}</p>
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export default function PasseportDetailPage() {
                 <div className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-orange-400 mt-1.5 shrink-0" />
                   <div>
-                    <p className="text-xs text-gray-400">Expédition</p>
+                    <p className="text-xs text-slate-400">Expédition</p>
                     <p className="text-xs font-medium">{new Date(passeport.dispatched_at).toLocaleDateString('fr-FR')}</p>
                   </div>
                 </div>
@@ -300,7 +300,7 @@ export default function PasseportDetailPage() {
                 <div className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 mt-1.5 shrink-0" />
                   <div>
-                    <p className="text-xs text-gray-400">Disponible retrait</p>
+                    <p className="text-xs text-slate-400">Disponible retrait</p>
                     <p className="text-xs font-medium">{new Date(passeport.disponible_at).toLocaleDateString('fr-FR')}</p>
                   </div>
                 </div>
@@ -309,7 +309,7 @@ export default function PasseportDetailPage() {
                 <div className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
                   <div>
-                    <p className="text-xs text-gray-400">Remis citoyen</p>
+                    <p className="text-xs text-slate-400">Remis citoyen</p>
                     <p className="text-xs font-medium">{new Date(passeport.delivered_at).toLocaleDateString('fr-FR')}</p>
                   </div>
                 </div>
@@ -318,29 +318,29 @@ export default function PasseportDetailPage() {
           </div>
 
           {/* Identifiants */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
             <div className="flex items-center gap-2 mb-4">
               <Hash size={16} className="text-[#1a5276]" />
-              <h2 className="font-semibold text-gray-700 text-sm">Identifiants</h2>
+              <h2 className="font-semibold text-slate-700 text-sm">Identifiants</h2>
             </div>
             <div className="space-y-3">
               {passeport.numero && (
                 <div>
-                  <p className="text-xs text-gray-400">N° passeport</p>
+                  <p className="text-xs text-slate-400">N° passeport</p>
                   <p className="font-mono text-sm font-bold text-[#1a5276]">{passeport.numero}</p>
                 </div>
               )}
               {passeport.reference_demande && (
                 <div>
-                  <p className="text-xs text-gray-400">Réf. demande</p>
+                  <p className="text-xs text-slate-400">Réf. demande</p>
                   <p className="font-mono text-xs text-violet-600 bg-violet-50 px-2 py-1 rounded">
                     {passeport.reference_demande}
                   </p>
                 </div>
               )}
               <div>
-                <p className="text-xs text-gray-400">ID système</p>
-                <p className="text-xs text-gray-500">#{passeport.id}</p>
+                <p className="text-xs text-slate-400">ID système</p>
+                <p className="text-xs text-slate-500">#{passeport.id}</p>
               </div>
             </div>
           </div>
@@ -349,25 +349,25 @@ export default function PasseportDetailPage() {
 
       {/* Timeline */}
       {timeline.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
           <div className="flex items-center gap-2 mb-4">
             <Clock size={16} className="text-[#1a5276]" />
-            <h2 className="font-semibold text-gray-700 text-sm">Historique</h2>
+            <h2 className="font-semibold text-slate-700 text-sm">Historique</h2>
           </div>
-          <ol className="relative border-l border-gray-200 ml-3 space-y-4">
+          <ol className="relative border-l border-slate-200 ml-3 space-y-4">
             {timeline.map((e: any) => (
               <li key={e.id} className="ml-4">
                 <div className="absolute -left-1.5 w-3 h-3 rounded-full bg-[#1a5276] border-2 border-white" />
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-700">{e.description}</p>
+                    <p className="text-sm font-medium text-slate-700">{e.description}</p>
                     {e.agent && (
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-slate-400 mt-0.5">
                         par {e.agent.name}
                       </p>
                     )}
                   </div>
-                  <span className="text-xs text-gray-400 shrink-0 ml-4">
+                  <span className="text-xs text-slate-400 shrink-0 ml-4">
                     {new Date(e.date).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}
                   </span>
                 </div>

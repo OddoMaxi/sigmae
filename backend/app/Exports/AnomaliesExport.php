@@ -16,7 +16,12 @@ class AnomaliesExport implements FromQuery, WithHeadings, WithMapping, WithStyle
     public function query()
     {
         return Anomalie::with(['passeport', 'lot.ambassade', 'signalePar'])
-            ->when($this->filters['statut'] ?? null, fn($q) => $q->where('statut', $this->filters['statut']))
+            ->when($this->filters['statut']       ?? null, fn($q) => $q->where('statut', $this->filters['statut']))
+            ->when($this->filters['ambassade_id'] ?? null, fn($q) => $q->whereHas(
+                'lot', fn($q2) => $q2->where('ambassade_id', $this->filters['ambassade_id'])
+            ))
+            ->when($this->filters['date_from']    ?? null, fn($q) => $q->whereDate('created_at', '>=', $this->filters['date_from']))
+            ->when($this->filters['date_to']      ?? null, fn($q) => $q->whereDate('created_at', '<=', $this->filters['date_to']))
             ->orderByDesc('created_at');
     }
 

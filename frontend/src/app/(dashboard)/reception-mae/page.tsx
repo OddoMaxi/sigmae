@@ -44,7 +44,7 @@ const statutStyle: Record<string, string> = {
   expedie:              'bg-orange-100 text-orange-700',
   recu_ambassade:       'bg-teal-100 text-teal-700',
   disponible_retrait:   'bg-emerald-100 text-emerald-700',
-  remis_citoyen:        'bg-gray-100 text-gray-700',
+  remis_citoyen:        'bg-slate-100 text-slate-700',
   anomalie:             'bg-red-100 text-red-700',
 }
 
@@ -54,7 +54,7 @@ function StatMini({ label, value, color }: { label: string; value: number; color
   return (
     <div className="bg-white rounded-xl border p-4 text-center">
       <p className={`text-3xl font-bold ${color}`}>{value}</p>
-      <p className="text-xs text-gray-500 mt-1">{label}</p>
+      <p className="text-xs text-slate-500 mt-1">{label}</p>
     </div>
   )
 }
@@ -163,10 +163,10 @@ export default function ReceptionMAEPage() {
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Réception MAE</h1>
-          <p className="text-sm text-gray-500">Réception des passeports imprimés depuis l'imprimerie</p>
+          <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Réception MAE</h1>
+          <p className="text-sm text-slate-500">Réception des passeports imprimés depuis l'imprimerie</p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
+        <div className="flex items-center gap-2 text-sm text-slate-500">
           <Clock size={15} />
           {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
         </div>
@@ -184,14 +184,14 @@ export default function ReceptionMAEPage() {
         {/* Zone de scan */}
         <div className="space-y-4">
           <div className="bg-white rounded-xl shadow-sm border p-5 space-y-4">
-            <div className="flex items-center gap-2 text-gray-700">
+            <div className="flex items-center gap-2 text-slate-700">
               <Barcode size={18} className="text-[#1a5276]" />
               <h2 className="font-semibold">Scanner / Saisir un passeport</h2>
             </div>
 
             <form onSubmit={handleSearch} className="flex gap-2">
               <div className="flex-1 relative">
-                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   ref={inputRef}
                   value={identifiant}
@@ -212,9 +212,9 @@ export default function ReceptionMAEPage() {
             </form>
 
             {/* Options de réception */}
-            <div className="bg-gray-50 rounded-lg p-3 space-y-3">
+            <div className="bg-slate-50 rounded-lg p-3 space-y-3">
               <div>
-                <label className="text-xs text-gray-500 font-medium block mb-1">Date de réception</label>
+                <label className="text-xs text-slate-500 font-medium block mb-1">Date de réception</label>
                 <input
                   type="date"
                   value={dateReception}
@@ -229,7 +229,7 @@ export default function ReceptionMAEPage() {
                   onChange={(e) => setAllerEnStock(e.target.checked)}
                   className="accent-[#1a5276]"
                 />
-                <span className="text-sm text-gray-700">Passer directement en stock (REÇU_MAE → EN_STOCK)</span>
+                <span className="text-sm text-slate-700">Passer directement en stock (REÇU_MAE → EN_STOCK)</span>
               </label>
             </div>
           </div>
@@ -256,15 +256,15 @@ export default function ReceptionMAEPage() {
                         <User size={18} className="text-[#1a5276]" />
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800">{scanResult.passeport?.nom_complet}</p>
+                        <p className="font-bold text-slate-800">{scanResult.passeport?.nom_complet}</p>
                         <p className="font-mono text-sm text-[#1a5276] font-semibold">{scanResult.passeport?.numero}</p>
                         {scanResult.passeport?.reference_demande && (
-                          <p className="text-xs text-gray-400">Réf: {scanResult.passeport.reference_demande}</p>
+                          <p className="text-xs text-slate-400">Réf: {scanResult.passeport.reference_demande}</p>
                         )}
                       </div>
                     </div>
                     <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
-                      statutStyle[scanResult.passeport?.statut ?? ''] ?? 'bg-gray-100 text-gray-600'
+                      statutStyle[scanResult.passeport?.statut ?? ''] ?? 'bg-slate-100 text-slate-600'
                     }`}>
                       {scanResult.passeport?.statut_label}
                     </span>
@@ -272,19 +272,19 @@ export default function ReceptionMAEPage() {
 
                   <div className="grid grid-cols-2 gap-3 text-xs">
                     {scanResult.passeport?.pays_destination && (
-                      <div className="flex items-center gap-1.5 text-gray-600">
+                      <div className="flex items-center gap-1.5 text-slate-600">
                         <MapPin size={12} className="text-[#1a5276]" />
                         <span>{scanResult.passeport.pays_destination.nom}</span>
                       </div>
                     )}
                     {scanResult.passeport?.ambassade_destination && (
-                      <div className="flex items-center gap-1.5 text-gray-600">
+                      <div className="flex items-center gap-1.5 text-slate-600">
                         <Package size={12} className="text-[#1a5276]" />
                         <span>{scanResult.passeport.ambassade_destination.nom}</span>
                       </div>
                     )}
                     {scanResult.passeport?.date_impression && (
-                      <div className="text-gray-500">
+                      <div className="text-slate-500">
                         <span className="font-medium">Imprimé : </span>
                         {formatDate(scanResult.passeport.date_impression)}
                       </div>
@@ -346,9 +346,9 @@ export default function ReceptionMAEPage() {
           <div className="px-5 py-4 border-b flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Archive size={16} className="text-[#1a5276]" />
-              <h3 className="font-semibold text-gray-800 text-sm">Réceptionnés aujourd'hui</h3>
+              <h3 className="font-semibold text-slate-800 text-sm">Réceptionnés aujourd'hui</h3>
             </div>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-slate-400">
               {todayData?.total ?? 0} passeport(s)
             </span>
           </div>
@@ -358,37 +358,37 @@ export default function ReceptionMAEPage() {
               <div className="w-7 h-7 border-2 border-[#1a5276] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : todayData?.data?.length === 0 ? (
-            <div className="flex flex-col items-center justify-center p-10 text-gray-400">
+            <div className="flex flex-col items-center justify-center p-10 text-slate-400">
               <Package size={32} className="mb-2 opacity-50" />
               <p className="text-sm">Aucun passeport reçu aujourd'hui</p>
             </div>
           ) : (
             <div className="overflow-y-auto max-h-[500px]">
               <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-gray-50">
+                <thead className="sticky top-0 bg-slate-50">
                   <tr className="border-b">
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500">N° Passeport</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500">Titulaire</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500">Statut</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500">Heure</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">N° Passeport</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Titulaire</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Statut</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Heure</th>
                   </tr>
                 </thead>
                 <tbody>
                   {todayData?.data?.map((p: any) => (
-                    <tr key={p.id} className="border-b hover:bg-gray-50 transition">
+                    <tr key={p.id} className="border-b hover:bg-slate-50 transition">
                       <td className="px-4 py-2.5 font-mono text-xs font-semibold text-[#1a5276]">{p.numero}</td>
                       <td className="px-4 py-2.5 text-xs">
-                        <p className="font-medium text-gray-700">{p.nom_titulaire} {p.prenom_titulaire}</p>
-                        <p className="text-gray-400">{p.ambassade_destination?.nom ?? '—'}</p>
+                        <p className="font-medium text-slate-700">{p.nom_titulaire} {p.prenom_titulaire}</p>
+                        <p className="text-slate-400">{p.ambassade_destination?.nom ?? '—'}</p>
                       </td>
                       <td className="px-4 py-2.5">
                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                          statutStyle[p.statut] ?? 'bg-gray-100'
+                          statutStyle[p.statut] ?? 'bg-slate-100'
                         }`}>
                           {p.statut_label}
                         </span>
                       </td>
-                      <td className="px-4 py-2.5 text-xs text-gray-400">
+                      <td className="px-4 py-2.5 text-xs text-slate-400">
                         {p.agent_reception?.heure ?? (p.received_at ? new Date(p.received_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—')}
                       </td>
                     </tr>
@@ -401,7 +401,7 @@ export default function ReceptionMAEPage() {
           {/* Distribution horaire résumée */}
           {stats?.distribution_horaire?.length > 0 && (
             <div className="border-t px-5 py-3">
-              <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-2">
+              <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2">
                 <TrendingUp size={12} /> Distribution horaire
               </div>
               <div className="flex gap-1 items-end h-10">
@@ -416,7 +416,7 @@ export default function ReceptionMAEPage() {
                           className="w-full bg-[#1a5276]/70 rounded-sm"
                           style={{ height: `${Math.max(pct * 0.36, 2)}px` }}
                         />
-                        <span className="text-gray-400" style={{ fontSize: '9px' }}>{h.heure}</span>
+                        <span className="text-slate-400" style={{ fontSize: '9px' }}>{h.heure}</span>
                       </div>
                     )
                   })}

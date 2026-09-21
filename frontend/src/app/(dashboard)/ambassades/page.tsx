@@ -40,10 +40,10 @@ function AmbassadeForm({ initial, onSave, onCancel }: {
         { name: 'responsable',   label: 'Responsable',   col: 2 },
       ].map(({ name, label }) => (
         <div key={name}>
-          <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
           <input
             {...register(name as keyof FormData)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
           />
           {errors[name as keyof FormData] && (
             <p className="text-red-500 text-xs mt-0.5">{errors[name as keyof FormData]?.message}</p>
@@ -52,7 +52,7 @@ function AmbassadeForm({ initial, onSave, onCancel }: {
       ))}
       <div className="col-span-2 flex justify-end gap-2 pt-2">
         <button type="button" onClick={onCancel}
-          className="flex items-center gap-1 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
+          className="flex items-center gap-1 px-4 py-2 text-sm border rounded-lg hover:bg-slate-50">
           <X size={14} /> Annuler
         </button>
         <button type="submit" disabled={isSubmitting}
@@ -90,8 +90,8 @@ export default function AmbassadesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Ambassades & Consulats</h1>
-          <p className="text-sm text-gray-500">Gestion des représentations diplomatiques</p>
+          <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Ambassades & Consulats</h1>
+          <p className="text-sm text-slate-500">Gestion des représentations diplomatiques</p>
         </div>
         <button onClick={() => { setShowForm(true); setEditing(null) }}
           className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
@@ -101,7 +101,7 @@ export default function AmbassadesPage() {
 
       {showForm && (
         <div className="bg-white rounded-xl shadow-sm border border-[#1a5276]/20 p-6">
-          <h3 className="font-semibold text-gray-700 mb-4">Nouvelle ambassade</h3>
+          <h3 className="font-semibold text-slate-700 mb-4">Nouvelle ambassade</h3>
           <AmbassadeForm onSave={(d) => create.mutate(d)} onCancel={() => setShowForm(false)} />
         </div>
       )}
@@ -112,7 +112,7 @@ export default function AmbassadesPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#1a5276] border-t-transparent" />
           </div>
         ) : data.map((a: any) => (
-          <div key={a.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div key={a.id} className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
             {editing === a.id ? (
               <AmbassadeForm
                 initial={a}
@@ -127,22 +127,22 @@ export default function AmbassadesPage() {
                       <Building2 size={18} className="text-[#1a5276]" />
                     </div>
                     <div>
-                      <span className="text-xs font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{a.code}</span>
+                      <span className="text-xs font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{a.code}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${a.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${a.is_active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
                       {a.is_active ? 'Active' : 'Inactive'}
                     </span>
                     <button onClick={() => setEditing(a.id)}
-                      className="p-1.5 text-gray-400 hover:text-[#1a5276] hover:bg-gray-100 rounded-lg transition">
+                      className="p-1.5 text-slate-400 hover:text-[#1a5276] hover:bg-slate-100 rounded-lg transition">
                       <Edit2 size={14} />
                     </button>
                   </div>
                 </div>
-                <h3 className="font-semibold text-gray-800">{a.nom}</h3>
-                <p className="text-sm text-gray-500">{a.ville}, {a.pays}</p>
-                {a.responsable && <p className="text-xs text-gray-400 mt-2">Responsable : {a.responsable}</p>}
+                <h3 className="font-semibold text-slate-800">{a.nom}</h3>
+                <p className="text-sm text-slate-500">{a.ville}, {a.pays}</p>
+                {a.responsable && <p className="text-xs text-slate-400 mt-2">Responsable : {a.responsable}</p>}
                 {a.email_contact && <p className="text-xs text-[#1a5276] mt-0.5">{a.email_contact}</p>}
               </>
             )}

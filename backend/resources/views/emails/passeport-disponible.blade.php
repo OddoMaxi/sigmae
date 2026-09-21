@@ -7,7 +7,7 @@
         body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 30px auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
         .header { background: #1a5276; color: #fff; padding: 24px 32px; text-align: center; }
-        .header img { height: 60px; margin-bottom: 12px; }
+        .header img { height: 60px; width: 60px; margin-bottom: 12px; border-radius: 50%; background: #fff; }
         .header h1 { margin: 0; font-size: 20px; }
         .body { padding: 32px; color: #333; }
         .info-box { background: #eaf4fb; border-left: 4px solid #1a5276; padding: 16px; margin: 24px 0; border-radius: 4px; }
@@ -18,6 +18,7 @@
 <body>
 <div class="container">
     <div class="header">
+        <img src="{{ asset('images/logo-maeiage.jpg') }}" alt="MAEIAGE">
         <h1>République de Guinée</h1>
         <p style="margin:4px 0;font-size:13px;">Ministère des Affaires Étrangères</p>
         <p style="margin:4px 0;font-size:13px;">Cellule de Gestion des Passeports</p>

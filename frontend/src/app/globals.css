@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f8fa;
+  --foreground: #14212b;
+
+  /* Brand navy ramp — anchored on the official MAEIAGE blue (#1a5276) */
+  --color-navy-950: #081620;
+  --color-navy-900: #0d2635;
+  --color-navy-800: #123449;
+  --color-navy-700: #17435f;
+  --color-navy-600: #1a5276;
+  --color-navy-500: #226a94;
+  --color-navy-400: #3d87b2;
+  --color-navy-300: #7bafcf;
+  --color-navy-100: #e4eef4;
+  --color-navy-50:  #f2f7fa;
+
+  /* Accent gold — from the official seal / national colours. Decorative only:
+     never used for text or thin strokes on a light surface (fails contrast). */
+  --color-gold-500: #c99a2e;
+  --color-gold-400: #e0b84a;
+
+  --radius-card: 0.875rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-manrope);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-navy-950: var(--color-navy-950);
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-800: var(--color-navy-800);
+  --color-navy-700: var(--color-navy-700);
+  --color-navy-600: var(--color-navy-600);
+  --color-navy-500: var(--color-navy-500);
+  --color-navy-400: var(--color-navy-400);
+  --color-navy-300: var(--color-navy-300);
+  --color-navy-100: var(--color-navy-100);
+  --color-navy-50:  var(--color-navy-50);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-400: var(--color-gold-400);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }

@@ -14,7 +14,7 @@ import {
 import { formatDate, formatDateTime } from '@/lib/utils'
 
 const statutStyle: Record<string, string> = {
-  brouillon:    'bg-gray-100 text-gray-700',
+  brouillon:    'bg-slate-100 text-slate-700',
   valide:       'bg-blue-100 text-blue-700',
   expedie:      'bg-yellow-100 text-yellow-800',
   en_transit:   'bg-amber-100 text-amber-800',
@@ -24,7 +24,7 @@ const statutStyle: Record<string, string> = {
 }
 
 const receptionStyle: Record<string, string> = {
-  en_attente: 'bg-gray-100 text-gray-500',
+  en_attente: 'bg-slate-100 text-slate-500',
   confirme:   'bg-green-100 text-green-700',
   anomalie:   'bg-orange-100 text-orange-700',
   manquant:   'bg-red-100 text-red-700',
@@ -32,9 +32,9 @@ const receptionStyle: Record<string, string> = {
 
 function InfoCard({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="bg-gray-50 rounded-lg p-3">
-      <p className="text-xs text-gray-500 mb-0.5">{label}</p>
-      <div className="text-sm font-medium text-gray-800">{children}</div>
+    <div className="bg-slate-50 rounded-lg p-3">
+      <p className="text-xs text-slate-500 mb-0.5">{label}</p>
+      <div className="text-sm font-medium text-slate-800">{children}</div>
     </div>
   )
 }
@@ -59,7 +59,7 @@ function QrCodeTab({ lot }: { lot: any }) {
 
   if (!lot.qr_token) {
     return (
-      <div className="text-center py-8 text-gray-400">
+      <div className="text-center py-8 text-slate-400">
         <QrCode size={40} className="mx-auto mb-2 opacity-40" />
         <p className="text-sm">QR code disponible après expédition</p>
       </div>
@@ -71,10 +71,10 @@ function QrCodeTab({ lot }: { lot: any }) {
       {imgSrc ? (
         <img src={imgSrc} alt="QR Code" className="w-48 h-48 border rounded-xl shadow" />
       ) : (
-        <div className="w-48 h-48 border rounded-xl bg-gray-50 flex items-center justify-center">
+        <div className="w-48 h-48 border rounded-xl bg-slate-50 flex items-center justify-center">
           {loading
             ? <div className="w-8 h-8 border-2 border-[#1a5276] border-t-transparent rounded-full animate-spin" />
-            : <QrCode size={40} className="text-gray-300" />}
+            : <QrCode size={40} className="text-slate-300" />}
         </div>
       )}
       <div className="flex gap-2">
@@ -87,11 +87,11 @@ function QrCodeTab({ lot }: { lot: any }) {
         <a
           href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/lots/${lot.id}/qr-code`}
           target="_blank"
-          className="flex items-center gap-2 border text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-50">
+          className="flex items-center gap-2 border text-slate-600 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
           <FileDown size={14} /> Télécharger PNG
         </a>
       </div>
-      <p className="text-xs text-gray-400 text-center max-w-xs">
+      <p className="text-xs text-slate-400 text-center max-w-xs">
         Scanner ce QR code depuis l'ambassade de réception pour confirmer la livraison.
       </p>
     </div>
@@ -115,20 +115,20 @@ function HistoriqueTab({ lotId }: { lotId: number }) {
   return (
     <div className="space-y-3 py-2">
       {data?.events?.length === 0 && (
-        <p className="text-center text-gray-400 text-sm py-6">Aucun événement enregistré.</p>
+        <p className="text-center text-slate-400 text-sm py-6">Aucun événement enregistré.</p>
       )}
       {data?.events?.map((e: any, i: number) => (
         <div key={i} className="flex gap-3">
           <div className="flex flex-col items-center">
             <div className="w-2.5 h-2.5 rounded-full bg-[#1a5276] mt-1 shrink-0" />
-            {i < data.events.length - 1 && <div className="w-0.5 flex-1 bg-gray-200 mt-1" />}
+            {i < data.events.length - 1 && <div className="w-0.5 flex-1 bg-slate-200 mt-1" />}
           </div>
           <div className="pb-3 flex-1">
-            <p className="text-xs font-semibold text-gray-700">{e.event}</p>
-            {e.description && <p className="text-xs text-gray-500 mt-0.5">{e.description}</p>}
+            <p className="text-xs font-semibold text-slate-700">{e.event}</p>
+            {e.description && <p className="text-xs text-slate-500 mt-0.5">{e.description}</p>}
             <div className="flex items-center gap-2 mt-1">
-              {e.agent && <span className="text-xs text-gray-400">par {e.agent.nom}</span>}
-              <span className="text-xs text-gray-400">{formatDateTime(e.date)}</span>
+              {e.agent && <span className="text-xs text-slate-400">par {e.agent.nom}</span>}
+              <span className="text-xs text-slate-400">{formatDateTime(e.date)}</span>
             </div>
           </div>
         </div>
@@ -178,7 +178,7 @@ export default function LotDetailPage() {
   )
 
   if (!lot) return (
-    <div className="text-center text-gray-400 py-16">Lot introuvable.</div>
+    <div className="text-center text-slate-400 py-16">Lot introuvable.</div>
   )
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
@@ -188,10 +188,10 @@ export default function LotDetailPage() {
       {/* Navigation */}
       <div className="flex items-center gap-3">
         <button onClick={() => router.push('/lots')}
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1a5276] transition">
+          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#1a5276] transition">
           <ArrowLeft size={15} /> Retour aux lots
         </button>
-        <span className="text-gray-300">/</span>
+        <span className="text-slate-300">/</span>
         <span className="font-mono text-sm text-[#1a5276] font-semibold">{lot.reference}</span>
       </div>
 
@@ -203,12 +203,12 @@ export default function LotDetailPage() {
               <Package size={22} className="text-[#1a5276]" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800 font-mono">{lot.reference}</h1>
-              <p className="text-sm text-gray-500">Lot d'expédition</p>
+              <h1 className="text-xl font-bold text-slate-800 font-mono">{lot.reference}</h1>
+              <p className="text-sm text-slate-500">Lot d'expédition</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className={`text-sm px-3 py-1.5 rounded-full font-semibold ${statutStyle[lot.statut] ?? 'bg-gray-100 text-gray-600'}`}>
+            <span className={`text-sm px-3 py-1.5 rounded-full font-semibold ${statutStyle[lot.statut] ?? 'bg-slate-100 text-slate-600'}`}>
               {lot.statut_label ?? lot.statut}
             </span>
             {/* Actions */}
@@ -241,7 +241,7 @@ export default function LotDetailPage() {
                   a.click()
                   URL.revokeObjectURL(url)
                 }}
-                className="flex items-center gap-1.5 border text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-50">
+                className="flex items-center gap-1.5 border text-slate-600 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
                 <FileDown size={13} /> Bordereau
               </button>
             )}
@@ -255,7 +255,7 @@ export default function LotDetailPage() {
               <MapPin size={13} className="text-[#1a5276]" />
               {lot.ambassade?.nom ?? '—'}
             </div>
-            {lot.ambassade?.ville && <p className="text-xs text-gray-400">{lot.ambassade.ville}</p>}
+            {lot.ambassade?.ville && <p className="text-xs text-slate-400">{lot.ambassade.ville}</p>}
           </InfoCard>
           <InfoCard label="Transporteur">
             <div className="flex items-center gap-1.5">
@@ -275,7 +275,7 @@ export default function LotDetailPage() {
         <div className="border-t px-6 py-2">
           <button
             onClick={() => setShowDetails(!showDetails)}
-            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700">
+            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700">
             {showDetails ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
             {showDetails ? 'Masquer' : 'Plus de détails'}
           </button>
@@ -301,7 +301,7 @@ export default function LotDetailPage() {
       </div>
 
       {/* Onglets */}
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+      <div className="flex gap-1 bg-slate-100 rounded-lg p-1 w-fit">
         {([
           ['passeports', `Passeports (${lot.passeports_count ?? 0})`],
           ['qr', 'QR Code'],
@@ -309,7 +309,7 @@ export default function LotDetailPage() {
         ] as [string, string][]).map(([t, l]) => (
           <button key={t} onClick={() => setTab(t as any)}
             className={`px-4 py-1.5 text-sm rounded-md font-medium transition ${
-              tab === t ? 'bg-white shadow text-[#1a5276]' : 'text-gray-500 hover:text-gray-700'
+              tab === t ? 'bg-white shadow text-[#1a5276]' : 'text-slate-500 hover:text-slate-700'
             }`}>
             {l}
           </button>
@@ -326,7 +326,7 @@ export default function LotDetailPage() {
                 <div className="w-7 h-7 border-2 border-[#1a5276] border-t-transparent rounded-full animate-spin" />
               </div>
             ) : passeports?.data?.length === 0 ? (
-              <div className="text-center py-8 text-gray-400">
+              <div className="text-center py-8 text-slate-400">
                 <Package size={32} className="mx-auto mb-2 opacity-40" />
                 <p className="text-sm">Aucun passeport dans ce lot</p>
                 {lot.statut === 'brouillon' && (
@@ -338,20 +338,20 @@ export default function LotDetailPage() {
             ) : (
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b bg-gray-50">
+                  <tr className="border-b bg-slate-50">
                     {['N° Passeport', 'Titulaire', 'Date naissance', 'Statut', 'Réception', 'Note'].map(h => (
-                      <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
+                      <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {passeports?.data?.map((p: any) => (
-                    <tr key={p.id} className="border-b hover:bg-gray-50">
+                    <tr key={p.id} className="border-b hover:bg-slate-50">
                       <td className="px-4 py-2.5 font-mono text-xs font-bold text-[#1a5276]">{p.numero}</td>
-                      <td className="px-4 py-2.5 text-xs font-medium text-gray-700">{p.nom_titulaire} {p.prenom_titulaire}</td>
-                      <td className="px-4 py-2.5 text-xs text-gray-500">{formatDate(p.date_naissance)}</td>
+                      <td className="px-4 py-2.5 text-xs font-medium text-slate-700">{p.nom_titulaire} {p.prenom_titulaire}</td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500">{formatDate(p.date_naissance)}</td>
                       <td className="px-4 py-2.5">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statutStyle[p.statut] ?? 'bg-gray-100'}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statutStyle[p.statut] ?? 'bg-slate-100'}`}>
                           {p.statut_label ?? p.statut}
                         </span>
                       </td>
@@ -362,7 +362,7 @@ export default function LotDetailPage() {
                           </span>
                         )}
                       </td>
-                      <td className="px-4 py-2.5 text-xs text-gray-400 max-w-[200px] truncate">
+                      <td className="px-4 py-2.5 text-xs text-slate-400 max-w-[200px] truncate">
                         {p.pivot?.notes ?? '—'}
                       </td>
                     </tr>

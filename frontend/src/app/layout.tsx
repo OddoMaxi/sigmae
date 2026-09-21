@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Manrope } from 'next/font/google'
 import './globals.css'
 import Providers from './providers'
 
-const inter = Inter({ subsets: ['latin'] })
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' })
 
 export const metadata: Metadata = {
   title: 'SGP-GE — Gestion des Passeports',
@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className="h-full">
-      <body className={`${inter.className} h-full bg-gray-50 text-gray-900`}>
+    <html lang="fr" className={`h-full ${manrope.variable}`}>
+      <body className="h-full font-sans antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

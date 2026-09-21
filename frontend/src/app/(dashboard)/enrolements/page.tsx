@@ -24,7 +24,7 @@ type FormData = z.infer<typeof schema>
 
 const STATUT_STYLE: Record<string, string> = {
   enrolee:            'bg-violet-100 text-violet-700',
-  imprime:            'bg-gray-100 text-gray-600',
+  imprime:            'bg-slate-100 text-slate-600',
   recu_mae:           'bg-blue-100 text-blue-700',
   en_stock:           'bg-indigo-100 text-indigo-700',
 }
@@ -37,7 +37,7 @@ function StatutBadge({ statut }: { statut: string }) {
     en_stock: 'En stock',
   }
   return (
-    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUT_STYLE[statut] ?? 'bg-gray-100 text-gray-500'}`}>
+    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUT_STYLE[statut] ?? 'bg-slate-100 text-slate-500'}`}>
       {labels[statut] ?? statut}
     </span>
   )
@@ -85,11 +85,11 @@ export default function EnrolementPage() {
       {/* ── En-tête ─────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight flex items-center gap-2">
             <Fingerprint className="text-[#1a5276]" size={26} />
             Enrôlements biométriques
           </h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <p className="text-sm text-slate-500 mt-0.5">
             Saisie des demandes de passeport après enrôlement biométrique
           </p>
         </div>
@@ -126,7 +126,7 @@ export default function EnrolementPage() {
       {/* ── Formulaire d'enrôlement ──────────────────────────────────────── */}
       {showForm && (
         <div className="bg-white rounded-xl shadow-sm border border-[#1a5276]/20 p-6">
-          <h3 className="font-semibold text-gray-700 mb-5 flex items-center gap-2">
+          <h3 className="font-semibold text-slate-700 mb-5 flex items-center gap-2">
             <FileText size={16} className="text-[#1a5276]" />
             Informations du demandeur
           </h3>
@@ -135,13 +135,13 @@ export default function EnrolementPage() {
 
               {/* Prénom */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   <User size={12} className="inline mr-1" />Prénom *
                 </label>
                 <input
                   {...register('prenom_titulaire')}
                   placeholder="Alpha"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
                 />
                 {errors.prenom_titulaire && (
                   <p className="text-red-500 text-xs mt-0.5">{errors.prenom_titulaire.message}</p>
@@ -150,13 +150,13 @@ export default function EnrolementPage() {
 
               {/* Nom */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   <User size={12} className="inline mr-1" />Nom *
                 </label>
                 <input
                   {...register('nom_titulaire')}
                   placeholder="Diallo"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
                 />
                 {errors.nom_titulaire && (
                   <p className="text-red-500 text-xs mt-0.5">{errors.nom_titulaire.message}</p>
@@ -165,14 +165,14 @@ export default function EnrolementPage() {
 
               {/* Date de naissance */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   <Calendar size={12} className="inline mr-1" />Date de naissance *
                 </label>
                 <input
                   type="date"
                   {...register('date_naissance')}
                   max={new Date().toISOString().split('T')[0]}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
                 />
                 {errors.date_naissance && (
                   <p className="text-red-500 text-xs mt-0.5">{errors.date_naissance.message}</p>
@@ -181,41 +181,41 @@ export default function EnrolementPage() {
 
               {/* Téléphone */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   <Phone size={12} className="inline mr-1" />Téléphone
                 </label>
                 <input
                   {...register('telephone')}
                   placeholder="+224 620 000 000"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
                 />
               </div>
 
               {/* Email */}
               <div className="col-span-2">
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   <Mail size={12} className="inline mr-1" />Email du citoyen
                 </label>
                 <input
                   {...register('email_citoyen')}
                   type="email"
                   placeholder="alpha.diallo@gmail.com"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
                 />
                 {errors.email_citoyen && (
                   <p className="text-red-500 text-xs mt-0.5">{errors.email_citoyen.message}</p>
                 )}
-                <p className="text-xs text-gray-400 mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5">
                   Utilisé pour notifier le citoyen quand son passeport est prêt au retrait.
                 </p>
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+            <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
               <button
                 type="button"
                 onClick={() => { setShowForm(false); reset() }}
-                className="flex items-center gap-1 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+                className="flex items-center gap-1 px-4 py-2 text-sm border rounded-lg hover:bg-slate-50"
               >
                 <X size={14} /> Annuler
               </button>
@@ -234,32 +234,32 @@ export default function EnrolementPage() {
 
       {/* ── Barre de recherche ──────────────────────────────────────────── */}
       <div className="relative">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Rechercher par nom, prénom, référence ou email..."
-          className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+          className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
         />
       </div>
 
       {/* ── Tableau des enrôlements ──────────────────────────────────────── */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center h-48">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#1a5276] border-t-transparent" />
           </div>
         ) : enrolements.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-48 text-gray-400">
+          <div className="flex flex-col items-center justify-center h-48 text-slate-400">
             <Fingerprint size={36} className="mb-3 opacity-30" />
             <p className="text-sm">Aucun enrôlement{search ? ' correspondant à la recherche' : ' enregistré'}</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 border-b">
+              <tr className="bg-slate-50 border-b">
                 {['Demandeur', 'Date naissance', 'Référence demande', 'Contact', 'Enrôlé le', 'Statut'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     {h}
                   </th>
                 ))}
@@ -267,27 +267,27 @@ export default function EnrolementPage() {
             </thead>
             <tbody>
               {enrolements.map((e: any) => (
-                <tr key={e.id} className="border-b hover:bg-gray-50 transition">
+                <tr key={e.id} className="border-b hover:bg-slate-50 transition">
                   <td className="px-4 py-3">
-                    <div className="font-medium text-gray-800">
+                    <div className="font-medium text-slate-800">
                       {e.prenom_titulaire} {e.nom_titulaire}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-gray-500">
+                  <td className="px-4 py-3 text-slate-500">
                     {e.date_naissance
                       ? new Date(e.date_naissance).toLocaleDateString('fr-FR')
                       : '—'}
                   </td>
                   <td className="px-4 py-3">
-                    <span className="font-mono text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-700">
+                    <span className="font-mono text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-700">
                       {e.reference_demande}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">
+                  <td className="px-4 py-3 text-slate-500 text-xs">
                     <div>{e.email_citoyen || '—'}</div>
                     <div>{e.telephone || ''}</div>
                   </td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">
+                  <td className="px-4 py-3 text-slate-500 text-xs">
                     {e.enrolled_at
                       ? new Date(e.enrolled_at).toLocaleDateString('fr-FR', {
                           day: '2-digit', month: 'short', year: 'numeric',
@@ -306,7 +306,7 @@ export default function EnrolementPage() {
 
         {/* Pagination info */}
         {data && data.total > 0 && (
-          <div className="px-4 py-3 border-t bg-gray-50 text-xs text-gray-500">
+          <div className="px-4 py-3 border-t bg-slate-50 text-xs text-slate-500">
             {data.total} enrôlement{data.total > 1 ? 's' : ''} au total
           </div>
         )}

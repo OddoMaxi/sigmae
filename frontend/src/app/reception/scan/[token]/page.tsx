@@ -8,7 +8,7 @@ import { z } from 'zod'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import {
-  Shield, Package, CheckCircle, AlertTriangle, XCircle,
+  Package, CheckCircle, AlertTriangle, XCircle,
   Eye, EyeOff, ChevronDown, ChevronUp, Clock, MapPin,
   Truck, Hash, User, RefreshCw,
 } from 'lucide-react'
@@ -92,7 +92,7 @@ type LoginForm = z.infer<typeof loginSchema>
 // ── Helpers UI ────────────────────────────────────────────────────────────────
 
 const STATUT_STYLE: Record<string, string> = {
-  brouillon:    'bg-gray-100 text-gray-700',
+  brouillon:    'bg-slate-100 text-slate-700',
   valide:       'bg-blue-100 text-blue-700',
   expedie:      'bg-yellow-100 text-yellow-800',
   en_transit:   'bg-amber-100 text-amber-800',
@@ -109,7 +109,7 @@ const ACTION_STYLE: Record<PasseportAction, string> = {
 
 function Badge({ statut, label }: { statut: string; label: string }) {
   return (
-    <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${STATUT_STYLE[statut] ?? 'bg-gray-100 text-gray-600'}`}>
+    <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${STATUT_STYLE[statut] ?? 'bg-slate-100 text-slate-600'}`}>
       {label}
     </span>
   )
@@ -121,8 +121,8 @@ function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string;
     <div className="flex items-start gap-2 text-sm">
       <span className="text-[#1a5276] mt-0.5 shrink-0">{icon}</span>
       <div>
-        <span className="text-gray-500 text-xs">{label}</span>
-        <p className="font-medium text-gray-800">{value}</p>
+        <span className="text-slate-500 text-xs">{label}</span>
+        <p className="font-medium text-slate-800">{value}</p>
       </div>
     </div>
   )
@@ -291,7 +291,7 @@ export default function ScanPage() {
       {/* En-tête */}
       <div className="bg-[#1a5276] text-white px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <Shield size={22} className="opacity-80" />
+          <img src="/images/logo-maeiage.jpg" alt="MAEIAGE" className="h-8 w-8 rounded-full bg-white" />
           <div>
             <p className="font-bold text-sm">SGP-GE — Réception Ambassade</p>
             <p className="text-xs opacity-60">Système de Gestion des Passeports</p>
@@ -305,7 +305,7 @@ export default function ScanPage() {
         {phase === 'loading' && (
           <div className="bg-white rounded-2xl shadow-sm border p-10 flex flex-col items-center gap-3">
             <div className="w-10 h-10 border-4 border-[#1a5276] border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-500 text-sm">Vérification du QR code…</p>
+            <p className="text-slate-500 text-sm">Vérification du QR code…</p>
           </div>
         )}
 
@@ -315,20 +315,20 @@ export default function ScanPage() {
             {scanData.error_code === 'ALREADY_RECEIVED' ? (
               <>
                 <CheckCircle size={48} className="mx-auto text-green-500" />
-                <h2 className="text-lg font-bold text-gray-800">Lot déjà réceptionné</h2>
-                <p className="text-sm text-gray-500">
+                <h2 className="text-lg font-bold text-slate-800">Lot déjà réceptionné</h2>
+                <p className="text-sm text-slate-500">
                   Le lot <strong>{scanData.lot?.reference ?? ''}</strong>{' '}
                   ({scanData.lot_statut_label ?? ''}) a déjà été traité.
                 </p>
                 {scanData.ambassade && (
-                  <p className="text-xs text-gray-400">{scanData.ambassade.nom}</p>
+                  <p className="text-xs text-slate-400">{scanData.ambassade.nom}</p>
                 )}
               </>
             ) : (
               <>
                 <XCircle size={48} className="mx-auto text-red-400" />
-                <h2 className="text-lg font-bold text-gray-800">QR code invalide</h2>
-                <p className="text-sm text-gray-500">{scanData.error_message}</p>
+                <h2 className="text-lg font-bold text-slate-800">QR code invalide</h2>
+                <p className="text-sm text-slate-500">{scanData.error_message}</p>
                 <span className="inline-block bg-red-50 text-red-600 text-xs px-3 py-1 rounded-full font-mono">
                   {scanData.error_code}
                 </span>
@@ -344,8 +344,8 @@ export default function ScanPage() {
               <div className="flex items-center gap-3">
                 <Package size={20} className="text-[#1a5276]" />
                 <div>
-                  <p className="font-bold text-gray-800 font-mono">{scanData.lot.reference}</p>
-                  <p className="text-xs text-gray-500">Lot d'expédition</p>
+                  <p className="font-bold text-slate-800 font-mono">{scanData.lot.reference}</p>
+                  <p className="text-xs text-slate-500">Lot d'expédition</p>
                 </div>
               </div>
               <Badge statut={scanData.lot.statut} label={scanData.lot.statut_label} />
@@ -361,7 +361,7 @@ export default function ScanPage() {
             </div>
 
             {scanData.token_issued_at && (
-              <p className="px-6 pb-4 text-xs text-gray-400">
+              <p className="px-6 pb-4 text-xs text-slate-400">
                 QR généré le {new Date(scanData.token_issued_at).toLocaleString('fr-FR')} •{' '}
                 expire le {new Date(scanData.token_expires_at!).toLocaleDateString('fr-FR')}
               </p>
@@ -376,7 +376,7 @@ export default function ScanPage() {
               <User size={18} />
               <h3 className="font-semibold">Connexion requise pour réceptionner</h3>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-slate-500">
               Identifiez-vous avec votre compte ambassade pour accéder au contenu du lot.
             </p>
 
@@ -398,7 +398,7 @@ export default function ScanPage() {
                   className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276] pr-10"
                 />
                 <button type="button" onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
                   {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
                 {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
@@ -418,7 +418,7 @@ export default function ScanPage() {
 
         {/* ── Phase : "connecté mais charge le détail" ── */}
         {phase === 'summary' && loadingDetail && (
-          <div className="bg-white rounded-2xl shadow-sm border p-6 flex items-center gap-3 text-sm text-gray-500">
+          <div className="bg-white rounded-2xl shadow-sm border p-6 flex items-center gap-3 text-sm text-slate-500">
             <RefreshCw size={16} className="animate-spin text-[#1a5276]" />
             Chargement du contenu du lot…
           </div>
@@ -427,9 +427,9 @@ export default function ScanPage() {
         {/* ── Phase : "connecté mais pas encore chargé, montrer le bouton" ── */}
         {phase === 'summary' && !loadingDetail && !isAuthenticated && (
           <div className="bg-white rounded-2xl shadow-sm border p-6 text-center space-y-3">
-            <User size={32} className="mx-auto text-gray-400" />
-            <p className="text-sm text-gray-600 font-medium">Authentification requise</p>
-            <p className="text-xs text-gray-400">Connectez-vous pour confirmer la réception de ce lot.</p>
+            <User size={32} className="mx-auto text-slate-400" />
+            <p className="text-sm text-slate-600 font-medium">Authentification requise</p>
+            <p className="text-xs text-slate-400">Connectez-vous pour confirmer la réception de ce lot.</p>
             <button
               onClick={() => setPhase('login')}
               className="bg-[#1a5276] text-white rounded-lg px-6 py-2 text-sm font-medium hover:bg-[#154360]">
@@ -451,7 +451,7 @@ export default function ScanPage() {
               ].map(({ label, value, color, bg }) => (
                 <div key={label} className={`${bg} rounded-xl p-3 text-center`}>
                   <p className={`text-2xl font-bold ${color}`}>{value}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">{label}</p>
                 </div>
               ))}
             </div>
@@ -459,7 +459,7 @@ export default function ScanPage() {
             {/* Sélection rapide */}
             {detail.lot.en_attente > 0 && (
               <div className="bg-white rounded-xl shadow-sm border px-4 py-3 flex flex-wrap gap-2 items-center">
-                <span className="text-xs text-gray-500 font-medium">Sélectionner tout comme :</span>
+                <span className="text-xs text-slate-500 font-medium">Sélectionner tout comme :</span>
                 <button onClick={() => selectAll('confirme')}
                   className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full hover:bg-green-200 font-medium">
                   <CheckCircle size={12} /> Reçu
@@ -478,10 +478,10 @@ export default function ScanPage() {
             {/* Liste des passeports */}
             <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
               <div className="border-b px-5 py-3 flex items-center justify-between">
-                <h3 className="font-semibold text-gray-800 text-sm">
+                <h3 className="font-semibold text-slate-800 text-sm">
                   Passeports ({detail.passeports.length})
                 </h3>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-slate-400">
                   {Object.keys(confirmations).length} sélectionné(s)
                 </span>
               </div>
@@ -508,8 +508,8 @@ export default function ScanPage() {
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-700 mt-0.5">{p.nom_complet}</p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-sm text-slate-700 mt-0.5">{p.nom_complet}</p>
+                          <p className="text-xs text-slate-400">
                             {p.date_naissance} {p.pays_destination ? `• ${p.pays_destination.nom}` : ''}
                           </p>
                         </div>
@@ -522,7 +522,7 @@ export default function ScanPage() {
                               className={`p-1.5 rounded-lg border transition ${
                                 selected?.statut === 'confirme'
                                   ? 'bg-green-500 border-green-500 text-white'
-                                  : 'border-gray-200 text-gray-400 hover:border-green-400 hover:text-green-600'
+                                  : 'border-slate-200 text-slate-400 hover:border-green-400 hover:text-green-600'
                               }`}>
                               <CheckCircle size={16} />
                             </button>
@@ -532,7 +532,7 @@ export default function ScanPage() {
                               className={`p-1.5 rounded-lg border transition ${
                                 selected?.statut === 'anomalie'
                                   ? 'bg-orange-400 border-orange-400 text-white'
-                                  : 'border-gray-200 text-gray-400 hover:border-orange-400 hover:text-orange-600'
+                                  : 'border-slate-200 text-slate-400 hover:border-orange-400 hover:text-orange-600'
                               }`}>
                               <AlertTriangle size={16} />
                             </button>
@@ -542,14 +542,14 @@ export default function ScanPage() {
                               className={`p-1.5 rounded-lg border transition ${
                                 selected?.statut === 'manquant'
                                   ? 'bg-red-400 border-red-400 text-white'
-                                  : 'border-gray-200 text-gray-400 hover:border-red-400 hover:text-red-600'
+                                  : 'border-slate-200 text-slate-400 hover:border-red-400 hover:text-red-600'
                               }`}>
                               <XCircle size={16} />
                             </button>
                             <button
                               onClick={() => setShowNoteFor(showNoteFor === p.id ? null : p.id)}
                               title="Note"
-                              className="p-1.5 rounded-lg border border-gray-200 text-gray-400 hover:border-gray-400 hover:text-gray-600 transition">
+                              className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:border-slate-400 hover:text-slate-600 transition">
                               {showNoteFor === p.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                             </button>
                           </div>
@@ -571,7 +571,7 @@ export default function ScanPage() {
 
                       {/* Note déjà enregistrée */}
                       {alreadyDone && p.reception.notes && (
-                        <p className="mt-1 text-xs text-gray-500 italic">Note : {p.reception.notes}</p>
+                        <p className="mt-1 text-xs text-slate-500 italic">Note : {p.reception.notes}</p>
                       )}
                     </div>
                   )
@@ -581,10 +581,10 @@ export default function ScanPage() {
 
             {/* Options de confirmation */}
             <div className="bg-white rounded-2xl shadow-sm border p-5 space-y-4">
-              <h3 className="font-semibold text-gray-800 text-sm">Options de confirmation</h3>
+              <h3 className="font-semibold text-slate-800 text-sm">Options de confirmation</h3>
 
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Commentaire de l'ambassade (optionnel)</label>
+                <label className="block text-xs text-slate-500 mb-1">Commentaire de l'ambassade (optionnel)</label>
                 <textarea
                   value={commentaire}
                   onChange={(e) => setCommentaire(e.target.value)}
@@ -602,13 +602,13 @@ export default function ScanPage() {
                   className="mt-0.5 accent-[#1a5276]"
                 />
                 <div>
-                  <p className="text-sm font-medium text-gray-700">Passer directement en « Disponible retrait »</p>
-                  <p className="text-xs text-gray-400">Les passeports confirmés seront immédiatement disponibles et les citoyens notifiés par email.</p>
+                  <p className="text-sm font-medium text-slate-700">Passer directement en « Disponible retrait »</p>
+                  <p className="text-xs text-slate-400">Les passeports confirmés seront immédiatement disponibles et les citoyens notifiés par email.</p>
                 </div>
               </label>
 
               <div className="bg-blue-50 rounded-lg px-4 py-3 flex items-center justify-between text-sm">
-                <span className="text-gray-600">
+                <span className="text-slate-600">
                   <strong>{Object.keys(confirmations).length}</strong> passeport(s) dans la confirmation
                 </span>
                 <div className="flex gap-2 text-xs">
@@ -647,8 +647,8 @@ export default function ScanPage() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
               <CheckCircle size={36} className="text-green-500" />
             </div>
-            <h2 className="text-xl font-bold text-gray-800">Réception enregistrée</h2>
-            <p className="text-sm text-gray-500 max-w-xs mx-auto">
+            <h2 className="text-xl font-bold text-slate-800">Réception enregistrée</h2>
+            <p className="text-sm text-slate-500 max-w-xs mx-auto">
               La réception du lot a été confirmée avec succès.
               {allerDisponible && ' Les citoyens ont été notifiés par email.'}
             </p>

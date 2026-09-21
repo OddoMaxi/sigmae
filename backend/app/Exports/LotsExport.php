@@ -16,7 +16,10 @@ class LotsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
     public function query()
     {
         return Lot::with(['ambassade', 'transporteur'])->withCount('passeports')
-            ->when($this->filters['statut'] ?? null, fn($q) => $q->where('statut', $this->filters['statut']))
+            ->when($this->filters['statut']       ?? null, fn($q) => $q->where('statut', $this->filters['statut']))
+            ->when($this->filters['ambassade_id'] ?? null, fn($q) => $q->where('ambassade_id', $this->filters['ambassade_id']))
+            ->when($this->filters['date_from']    ?? null, fn($q) => $q->whereDate('date_expedition', '>=', $this->filters['date_from']))
+            ->when($this->filters['date_to']      ?? null, fn($q) => $q->whereDate('date_expedition', '<=', $this->filters['date_to']))
             ->orderByDesc('created_at');
     }
 

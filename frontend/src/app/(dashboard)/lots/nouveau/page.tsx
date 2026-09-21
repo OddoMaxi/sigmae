@@ -63,8 +63,8 @@ function PasseportSelector({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-gray-700">Passeports à ajouter</label>
-        <span className="text-xs text-gray-400">{selected.length} sélectionné(s)</span>
+        <label className="text-sm font-medium text-slate-700">Passeports à ajouter</label>
+        <span className="text-xs text-slate-400">{selected.length} sélectionné(s)</span>
       </div>
 
       {!ambassadeId && (
@@ -75,9 +75,9 @@ function PasseportSelector({
 
       {ambassadeId && (
         <div className="border rounded-xl overflow-hidden">
-          <div className="p-3 border-b bg-gray-50">
+          <div className="p-3 border-b bg-slate-50">
             <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -93,24 +93,24 @@ function PasseportSelector({
                 <div className="w-5 h-5 border-2 border-[#1a5276] border-t-transparent rounded-full animate-spin" />
               </div>
             ) : data?.data?.length === 0 ? (
-              <p className="text-center text-xs text-gray-400 py-6">Aucun passeport en stock pour cette ambassade.</p>
+              <p className="text-center text-xs text-slate-400 py-6">Aucun passeport en stock pour cette ambassade.</p>
             ) : (
               data?.data?.map((p: PasseportStock) => (
                 <div key={p.id}
-                  className={`flex items-center justify-between px-4 py-2.5 border-b hover:bg-gray-50 transition ${
+                  className={`flex items-center justify-between px-4 py-2.5 border-b hover:bg-slate-50 transition ${
                     selectedIds.has(p.id) ? 'bg-green-50' : ''
                   }`}>
                   <div>
                     <p className="text-xs font-bold font-mono text-[#1a5276]">{p.numero}</p>
-                    <p className="text-xs text-gray-600">{p.nom_titulaire} {p.prenom_titulaire}</p>
+                    <p className="text-xs text-slate-600">{p.nom_titulaire} {p.prenom_titulaire}</p>
                   </div>
                   {selectedIds.has(p.id) ? (
-                    <button onClick={() => onRemove(p.id)}
+                    <button type="button" onClick={() => onRemove(p.id)}
                       className="text-red-400 hover:text-red-600 transition">
                       <X size={16} />
                     </button>
                   ) : (
-                    <button onClick={() => onAdd(p)}
+                    <button type="button" onClick={() => onAdd(p)}
                       className="text-[#1a5276] hover:text-[#154360] transition">
                       <Plus size={16} />
                     </button>
@@ -134,7 +134,7 @@ function PasseportSelector({
               <span key={p.id}
                 className="inline-flex items-center gap-1 bg-white border border-green-200 rounded-full px-2.5 py-1 text-xs font-mono text-[#1a5276]">
                 {p.numero}
-                <button onClick={() => onRemove(p.id)} className="text-gray-400 hover:text-red-500 ml-0.5">
+                <button type="button" onClick={() => onRemove(p.id)} className="text-slate-400 hover:text-red-500 ml-0.5">
                   <X size={10} />
                 </button>
               </span>
@@ -204,26 +204,26 @@ export default function NouveauLotPage() {
       {/* Navigation */}
       <div className="flex items-center gap-3">
         <button onClick={() => router.push('/lots')}
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1a5276] transition">
+          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#1a5276] transition">
           <ArrowLeft size={15} /> Retour aux lots
         </button>
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Nouveau lot d'expédition</h1>
-        <p className="text-sm text-gray-500">Un lot doit être destiné à une seule ambassade.</p>
+        <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Nouveau lot d'expédition</h1>
+        <p className="text-sm text-slate-500">Un lot doit être destiné à une seule ambassade.</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Informations générales */}
         <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-5">
-          <h2 className="font-semibold text-gray-800 flex items-center gap-2">
+          <h2 className="font-semibold text-slate-800 flex items-center gap-2">
             <Package size={16} className="text-[#1a5276]" /> Informations générales
           </h2>
 
           {/* Ambassade */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
               <Building2 size={14} className="inline mr-1 text-[#1a5276]" />
               Ambassade de destination <span className="text-red-500">*</span>
             </label>
@@ -241,7 +241,7 @@ export default function NouveauLotPage() {
 
           {/* Transporteur */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
               <Truck size={14} className="inline mr-1 text-[#1a5276]" />
               Transporteur <span className="text-red-500">*</span>
             </label>
@@ -262,7 +262,7 @@ export default function NouveauLotPage() {
           {/* Dates */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Date d'expédition</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Date d'expédition</label>
               <input
                 type="date"
                 {...register('date_expedition')}
@@ -270,7 +270,7 @@ export default function NouveauLotPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Réception prévue</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Réception prévue</label>
               <input
                 type="date"
                 {...register('date_reception_prevue')}
@@ -281,7 +281,7 @@ export default function NouveauLotPage() {
 
           {/* Référence suivi */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Référence de suivi transporteur</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Référence de suivi transporteur</label>
             <input
               type="text"
               {...register('reference_suivi')}
@@ -292,7 +292,7 @@ export default function NouveauLotPage() {
 
           {/* Notes */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Notes internes (optionnel)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Notes internes (optionnel)</label>
             <textarea
               {...register('notes')}
               rows={3}
@@ -317,7 +317,7 @@ export default function NouveauLotPage() {
           <button
             type="button"
             onClick={() => router.push('/lots')}
-            className="flex-1 border border-gray-300 text-gray-600 py-3 rounded-xl text-sm font-medium hover:bg-gray-50">
+            className="flex-1 border border-slate-300 text-slate-600 py-3 rounded-xl text-sm font-medium hover:bg-slate-50">
             Annuler
           </button>
           <button

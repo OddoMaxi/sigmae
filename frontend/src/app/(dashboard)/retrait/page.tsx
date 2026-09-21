@@ -73,8 +73,8 @@ export default function RetraitPage() {
     <div className="space-y-6">
       {/* En-tête */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Retrait des passeports</h1>
-        <p className="text-sm text-gray-500 mt-1">Gérez la mise à disposition et la remise des passeports aux citoyens</p>
+        <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Retrait des passeports</h1>
+        <p className="text-[13px] text-slate-500 mt-1">Gérez la mise à disposition et la remise des passeports aux citoyens</p>
       </div>
 
       {/* KPIs */}
@@ -101,13 +101,13 @@ export default function RetraitPage() {
 
       {/* Onglets + recherche */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex border border-gray-200 rounded-lg overflow-hidden bg-white">
+        <div className="flex border border-slate-200 rounded-lg overflow-hidden bg-white">
           <button
             onClick={() => setTab('recu_ambassade')}
             className={`px-4 py-2 text-sm font-medium transition flex items-center ${
               tab === 'recu_ambassade'
                 ? 'bg-teal-600 text-white'
-                : 'text-gray-600 hover:bg-gray-50'
+                : 'text-slate-600 hover:bg-slate-50'
             }`}
           >
             <HandCoins size={15} className="mr-2" />
@@ -116,10 +116,10 @@ export default function RetraitPage() {
           </button>
           <button
             onClick={() => setTab('disponible_retrait')}
-            className={`px-4 py-2 text-sm font-medium transition flex items-center border-l border-gray-200 ${
+            className={`px-4 py-2 text-sm font-medium transition flex items-center border-l border-slate-200 ${
               tab === 'disponible_retrait'
                 ? 'bg-green-600 text-white'
-                : 'text-gray-600 hover:bg-gray-50'
+                : 'text-slate-600 hover:bg-slate-50'
             }`}
           >
             <UserCheck size={15} className="mr-2" />
@@ -129,24 +129,24 @@ export default function RetraitPage() {
         </div>
 
         <div className="relative">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Nom, numéro, référence…"
-            className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a5276] w-64"
+            className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a5276] w-64"
           />
         </div>
       </div>
 
       {/* Tableau */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center h-40">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#1a5276] border-t-transparent" />
           </div>
         ) : displayed.length === 0 ? (
-          <div className="text-center py-16 text-gray-400">
+          <div className="text-center py-16 text-slate-400">
             <CheckCircle size={36} className="mx-auto mb-3 opacity-30" />
             <p className="text-sm">
               {search ? 'Aucun résultat pour cette recherche.' : 'Aucun passeport dans cet état.'}
@@ -155,25 +155,25 @@ export default function RetraitPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 border-b">
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Titulaire</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">N° Passeport</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Contact</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Ambassade</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">
+              <tr className="bg-slate-50 border-b">
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Titulaire</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">N° Passeport</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Contact</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Ambassade</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
                   {tab === 'recu_ambassade' ? 'Réceptionné le' : 'Disponible depuis'}
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody>
               {displayed.map((p: any) => (
-                <tr key={p.id} className="border-b hover:bg-gray-50 transition">
+                <tr key={p.id} className="border-b hover:bg-slate-50 transition">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <User size={16} className="text-gray-300 shrink-0" />
+                      <User size={16} className="text-slate-300 shrink-0" />
                       <div>
-                        <p className="font-medium text-gray-800">{p.prenom_titulaire} {p.nom_titulaire}</p>
+                        <p className="font-medium text-slate-800">{p.prenom_titulaire} {p.nom_titulaire}</p>
                         {p.reference_demande && (
                           <p className="text-xs text-violet-500 font-mono">{p.reference_demande}</p>
                         )}
@@ -184,18 +184,18 @@ export default function RetraitPage() {
                     {p.numero ?? '—'}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="text-xs text-gray-500 space-y-0.5">
+                    <div className="text-xs text-slate-500 space-y-0.5">
                       {p.email_citoyen && <p>{p.email_citoyen}</p>}
                       {p.telephone    && <p>{p.telephone}</p>}
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <div className="flex items-center gap-1 text-xs text-slate-500">
                       <Building2 size={13} className="shrink-0" />
                       {p.ambassade_destination?.nom ?? '—'}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-xs text-gray-400">
+                  <td className="px-4 py-3 text-xs text-slate-400">
                     {tab === 'recu_ambassade'
                       ? (p.received_at ? new Date(p.received_at).toLocaleDateString('fr-FR') : '—')
                       : (p.disponible_at ? new Date(p.disponible_at).toLocaleDateString('fr-FR') : '—')
@@ -227,7 +227,7 @@ export default function RetraitPage() {
                         </button>
                       )}
                       <Link href={`/passeports/${p.id}`}
-                        className="text-gray-400 hover:text-[#1a5276] transition" title="Voir la fiche">
+                        className="text-slate-400 hover:text-[#1a5276] transition" title="Voir la fiche">
                         <ExternalLink size={15} />
                       </Link>
                     </div>

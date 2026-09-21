@@ -40,7 +40,7 @@ const STEPS: Step[] = [
     actor: 'Agent ambassade',
     actorIcon: Users,
     lieu: 'Ambassade (pays de résidence)',
-    statut: { from: '—', to: 'ENRÔLÉ', fromColor: 'bg-gray-100 text-gray-500', toColor: 'bg-violet-100 text-violet-700' },
+    statut: { from: '—', to: 'ENRÔLÉ', fromColor: 'bg-slate-100 text-slate-500', toColor: 'bg-violet-100 text-violet-700' },
     description:
       "Le citoyen se présente à l'ambassade de son pays de résidence. L'agent saisit sa demande dans le système et capture ses données biométriques.",
     details: [
@@ -54,14 +54,14 @@ const STEPS: Step[] = [
   {
     id: 2,
     icon: Printer,
-    color: 'text-gray-600',
-    bg: 'bg-gray-50 border-gray-200',
-    badge: 'bg-gray-100 text-gray-700',
+    color: 'text-slate-600',
+    bg: 'bg-slate-50 border-slate-200',
+    badge: 'bg-slate-100 text-slate-700',
     title: 'Impression du passeport',
     actor: 'Gestionnaire MAE',
     actorIcon: Shield,
     lieu: 'Ministère des Affaires Étrangères — Conakry',
-    statut: { from: 'ENRÔLÉ', to: 'IMPRIMÉ', fromColor: 'bg-violet-100 text-violet-700', toColor: 'bg-gray-200 text-gray-700' },
+    statut: { from: 'ENRÔLÉ', to: 'IMPRIMÉ', fromColor: 'bg-violet-100 text-violet-700', toColor: 'bg-slate-200 text-slate-700' },
     description:
       'Le dossier arrive au MAE à Conakry. Le gestionnaire consulte la liste des demandes enrôlées et assigne un numéro de passeport physique à chaque dossier.',
     details: [
@@ -82,7 +82,7 @@ const STEPS: Step[] = [
     actor: 'Gestionnaire MAE',
     actorIcon: Shield,
     lieu: 'Ministère des Affaires Étrangères — Conakry',
-    statut: { from: 'IMPRIMÉ', to: 'REÇU MAE', fromColor: 'bg-gray-200 text-gray-700', toColor: 'bg-blue-100 text-blue-700' },
+    statut: { from: 'IMPRIMÉ', to: 'REÇU MAE', fromColor: 'bg-slate-200 text-slate-700', toColor: 'bg-blue-100 text-blue-700' },
     description:
       "Le passeport physique imprimé est remis au bureau de gestion du MAE. Le gestionnaire confirme dans le système la réception physique du document.",
     details: [
@@ -143,7 +143,7 @@ const STEPS: Step[] = [
     actor: 'Gestionnaire / Responsable Cellule',
     actorIcon: Shield,
     lieu: 'Ministère des Affaires Étrangères — Conakry',
-    statut: { from: 'BROUILLON', to: 'VALIDÉ', fromColor: 'bg-gray-100 text-gray-600', toColor: 'bg-green-100 text-green-700' },
+    statut: { from: 'BROUILLON', to: 'VALIDÉ', fromColor: 'bg-slate-100 text-slate-600', toColor: 'bg-green-100 text-green-700' },
     description:
       'Le gestionnaire ou le responsable de cellule contrôle le contenu du lot et valide avant l\'expédition. Cette validation est irréversible.',
     details: [
@@ -292,7 +292,7 @@ const ANOMALY_TYPES = [
   { type: 'Manquant', desc: 'Passeport absent du colis à la réception', color: 'text-red-600 bg-red-50 border-red-200' },
   { type: 'Endommagé', desc: 'Document physiquement dégradé ou illisible', color: 'text-orange-600 bg-orange-50 border-orange-200' },
   { type: 'Erroné', desc: 'Informations incorrectes sur le document', color: 'text-yellow-600 bg-yellow-50 border-yellow-200' },
-  { type: 'Autre', desc: 'Tout autre problème nécessitant un traitement', color: 'text-gray-600 bg-gray-50 border-gray-200' },
+  { type: 'Autre', desc: 'Tout autre problème nécessitant un traitement', color: 'text-slate-600 bg-slate-50 border-slate-200' },
 ]
 
 /* ─── Composants ─────────────────────────────────────────────────────────── */
@@ -318,7 +318,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
         onClick={() => setOpen((v) => !v)}
       >
         {/* Numéro */}
-        <div className="flex-shrink-0 w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center font-bold text-gray-700 text-sm border">
+        <div className="flex-shrink-0 w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center font-bold text-slate-700 text-sm border">
           {index + 1}
         </div>
 
@@ -330,12 +330,12 @@ function StepCard({ step, index }: { step: Step; index: number }) {
         {/* Contenu */}
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
-            <h3 className="font-semibold text-gray-800 text-base">{step.title}</h3>
+            <h3 className="font-semibold text-slate-800 text-base">{step.title}</h3>
             <span className={cn('text-xs font-medium px-2 py-0.5 rounded-full', step.badge)}>
               Étape {index + 1}
             </span>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
             <span className="flex items-center gap-1">
               <ActorIcon size={12} />
               {step.actor}
@@ -348,13 +348,13 @@ function StepCard({ step, index }: { step: Step; index: number }) {
           {/* Transition de statut */}
           <div className="flex items-center gap-2 mt-2">
             <StatusBadge label={step.statut.from} color={step.statut.fromColor} />
-            <ArrowRight size={14} className="text-gray-400 flex-shrink-0" />
+            <ArrowRight size={14} className="text-slate-400 flex-shrink-0" />
             <StatusBadge label={step.statut.to} color={step.statut.toColor} />
           </div>
         </div>
 
         {/* Chevron */}
-        <div className="flex-shrink-0 mt-1 text-gray-400">
+        <div className="flex-shrink-0 mt-1 text-slate-400">
           {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
         </div>
       </button>
@@ -362,11 +362,11 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       {/* Détails dépliables */}
       {open && (
         <div className="px-5 pb-5 space-y-4 border-t border-white/60 pt-4">
-          <p className="text-sm text-gray-700 leading-relaxed">{step.description}</p>
+          <p className="text-sm text-slate-700 leading-relaxed">{step.description}</p>
 
           <ul className="space-y-2">
             {step.details.map((d, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+              <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
                 <CheckCircle size={14} className="mt-0.5 flex-shrink-0 text-green-500" />
                 {d}
               </li>
@@ -400,22 +400,22 @@ export default function GuidePage() {
             <Shield size={22} className="text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Guide du système SGP-GE</h1>
-            <p className="text-sm text-gray-500">Processus complet — de l'enrôlement à la délivrance du passeport</p>
+            <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Guide du système SGP-GE</h1>
+            <p className="text-sm text-slate-500">Processus complet — de l'enrôlement à la délivrance du passeport</p>
           </div>
         </div>
       </div>
 
       {/* Vue synthétique du flux */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h2 className="font-semibold text-gray-700 mb-5 flex items-center gap-2">
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+        <h2 className="font-semibold text-slate-700 mb-5 flex items-center gap-2">
           <ArrowRight size={16} className="text-[#1a5276]" />
           Flux simplifié
         </h2>
         <div className="flex flex-wrap gap-2 items-center">
           {[
             { label: 'ENRÔLÉ', color: 'bg-violet-100 text-violet-700' },
-            { label: 'IMPRIMÉ', color: 'bg-gray-200 text-gray-700' },
+            { label: 'IMPRIMÉ', color: 'bg-slate-200 text-slate-700' },
             { label: 'REÇU MAE', color: 'bg-blue-100 text-blue-700' },
             { label: 'EN STOCK', color: 'bg-indigo-100 text-indigo-700' },
             { label: 'EN LOT', color: 'bg-yellow-100 text-yellow-700' },
@@ -429,11 +429,11 @@ export default function GuidePage() {
               <span className={cn('text-xs font-semibold px-2.5 py-1 rounded-full', s.color)}>
                 {s.label}
               </span>
-              {i < arr.length - 1 && <ArrowRight size={14} className="text-gray-300 flex-shrink-0" />}
+              {i < arr.length - 1 && <ArrowRight size={14} className="text-slate-300 flex-shrink-0" />}
             </div>
           ))}
         </div>
-        <p className="text-xs text-gray-400 mt-4 flex items-center gap-1">
+        <p className="text-xs text-slate-400 mt-4 flex items-center gap-1">
           <AlertTriangle size={12} />
           À n'importe quelle étape, un problème peut créer une <strong className="text-red-500 ml-1">ANOMALIE</strong>
         </p>
@@ -441,16 +441,16 @@ export default function GuidePage() {
 
       {/* Rôles */}
       <section>
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Les acteurs du système</h2>
+        <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-4">Les acteurs du système</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {ROLES.map((r) => (
-            <div key={r.title} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-start gap-3">
+            <div key={r.title} className="bg-white rounded-xl border border-slate-100 shadow-sm p-4 flex items-start gap-3">
               <div className={cn('p-2 rounded-lg flex-shrink-0', r.color)}>
                 <r.icon size={16} className="text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-800 text-sm">{r.title}</p>
-                <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{r.desc}</p>
+                <p className="font-medium text-slate-800 text-sm">{r.title}</p>
+                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{r.desc}</p>
               </div>
             </div>
           ))}
@@ -460,7 +460,7 @@ export default function GuidePage() {
       {/* Étapes détaillées */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+          <h2 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
             Les 11 étapes du processus
           </h2>
           <button
@@ -479,12 +479,12 @@ export default function GuidePage() {
       </section>
 
       {/* Gestion des anomalies */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h2 className="font-semibold text-gray-700 mb-1 flex items-center gap-2">
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+        <h2 className="font-semibold text-slate-700 mb-1 flex items-center gap-2">
           <AlertTriangle size={16} className="text-red-500" />
           Gestion des anomalies
         </h2>
-        <p className="text-sm text-gray-500 mb-5">
+        <p className="text-sm text-slate-500 mb-5">
           Une anomalie peut être déclarée à tout moment du processus. Elle suit son propre cycle de vie jusqu'à résolution.
         </p>
 
@@ -500,7 +500,7 @@ export default function GuidePage() {
 
         {/* Cycle de l'anomalie */}
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Cycle de traitement</p>
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Cycle de traitement</p>
           <div className="flex items-center gap-2 flex-wrap">
             {[
               { label: 'OUVERT', color: 'bg-red-100 text-red-700' },
@@ -509,11 +509,11 @@ export default function GuidePage() {
             ].map((s, i, arr) => (
               <div key={s.label} className="flex items-center gap-2">
                 <StatusBadge label={s.label} color={s.color} />
-                {i < arr.length - 1 && <ArrowRight size={14} className="text-gray-300" />}
+                {i < arr.length - 1 && <ArrowRight size={14} className="text-slate-300" />}
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-400 mt-3">
+          <p className="text-xs text-slate-400 mt-3">
             Après résolution, le passeport peut être réintégré en stock, marqué reçu en ambassade, ou disponible au retrait selon la situation.
           </p>
         </div>
@@ -525,7 +525,7 @@ export default function GuidePage() {
           <Shield size={16} />
           Traçabilité complète
         </h2>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-slate-600 leading-relaxed">
           Chaque action dans le système est enregistrée dans le <strong>journal d'audit</strong> :
           qui a fait quoi, quand, et sur quel enregistrement. Les valeurs avant et après
           chaque modification sont conservées. De plus, chaque passeport possède son propre

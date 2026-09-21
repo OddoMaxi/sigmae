@@ -10,7 +10,7 @@ const typeColors: Record<string, string> = {
   manquant:  'bg-red-100 text-red-700',
   endommage: 'bg-orange-100 text-orange-700',
   errone:    'bg-yellow-100 text-yellow-700',
-  autre:     'bg-gray-100 text-gray-700',
+  autre:     'bg-slate-100 text-slate-700',
 }
 
 const statutColors: Record<string, string> = {
@@ -45,17 +45,17 @@ export default function AnomaliesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Anomalies</h1>
-        <p className="text-sm text-gray-500">Suivi et résolution des anomalies signalées</p>
+        <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Anomalies</h1>
+        <p className="text-sm text-slate-500">Suivi et résolution des anomalies signalées</p>
       </div>
 
       {/* Filtres */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex gap-3">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4 flex gap-3">
         {['', 'ouvert', 'en_traitement', 'resolu'].map((s) => (
           <button key={s}
             onClick={() => { setStatut(s); setPage(1) }}
             className={`px-3 py-1.5 text-xs rounded-full border font-medium transition ${
-              statut === s ? 'bg-[#1a5276] text-white border-[#1a5276]' : 'border-gray-200 text-gray-600 hover:border-[#1a5276]'
+              statut === s ? 'bg-[#1a5276] text-white border-[#1a5276]' : 'border-slate-200 text-slate-600 hover:border-[#1a5276]'
             }`}>
             {s || 'Toutes'}
           </button>
@@ -63,7 +63,7 @@ export default function AnomaliesPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center h-48">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#1a5276] border-t-transparent" />
@@ -71,17 +71,17 @@ export default function AnomaliesPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 border-b">
+              <tr className="bg-slate-50 border-b">
                 {['Type', 'Passeport', 'Lot / Ambassade', 'Description', 'Statut', 'Signalé par', 'Actions'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {data?.data?.map((a: any) => (
-                <tr key={a.id} className="border-b hover:bg-gray-50 transition">
+                <tr key={a.id} className="border-b hover:bg-slate-50 transition">
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${typeColors[a.type] ?? 'bg-gray-100'}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${typeColors[a.type] ?? 'bg-slate-100'}`}>
                       {a.type}
                     </span>
                   </td>
@@ -90,15 +90,15 @@ export default function AnomaliesPage() {
                   </td>
                   <td className="px-4 py-3">
                     <p className="text-xs font-medium">{a.lot?.reference}</p>
-                    <p className="text-xs text-gray-400">{a.lot?.ambassade?.nom}</p>
+                    <p className="text-xs text-slate-400">{a.lot?.ambassade?.nom}</p>
                   </td>
-                  <td className="px-4 py-3 text-gray-600 max-w-xs truncate">{a.description}</td>
+                  <td className="px-4 py-3 text-slate-600 max-w-xs truncate">{a.description}</td>
                   <td className="px-4 py-3">
                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${statutColors[a.statut] ?? ''}`}>
                       {a.statut}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-gray-500">{a.signale_par?.name}</td>
+                  <td className="px-4 py-3 text-xs text-slate-500">{a.signale_par?.name}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-2">
                       {a.statut === 'ouvert' && (

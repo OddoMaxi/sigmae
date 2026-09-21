@@ -73,7 +73,7 @@ const ROLE_COLORS: Record<string, string> = {
   agent_logistique:   'bg-orange-100 text-orange-700 border-orange-200',
   agent_reception:    'bg-yellow-100 text-yellow-800 border-yellow-200',
   agent_enrolement:   'bg-violet-100 text-violet-700 border-violet-200',
-  agent_impression:   'bg-gray-100 text-gray-700 border-gray-200',
+  agent_impression:   'bg-slate-100 text-slate-700 border-slate-200',
   agent_ambassade:    'bg-green-100 text-green-700 border-green-200',
   utilisateur_ambassade:'bg-emerald-100 text-emerald-700 border-emerald-200',
   auditeur:           'bg-slate-100 text-slate-700 border-slate-200',
@@ -171,8 +171,8 @@ export default function RolesPage() {
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Rôles &amp; Permissions</h1>
-          <p className="text-sm text-gray-500">Gestion des rôles et de leurs droits d'accès</p>
+          <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Rôles &amp; Permissions</h1>
+          <p className="text-sm text-slate-500">Gestion des rôles et de leurs droits d'accès</p>
         </div>
         <button onClick={() => setShowCreate(true)}
           className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
@@ -183,9 +183,9 @@ export default function RolesPage() {
       <div className="flex gap-6 items-start">
 
         {/* ── Liste des rôles ─────────────────────────────────────────────── */}
-        <div className="w-72 shrink-0 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-4 py-3 border-b bg-gray-50">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <div className="w-72 shrink-0 bg-white rounded-[var(--radius-card)] border border-slate-200/70 overflow-hidden">
+          <div className="px-4 py-3 border-b bg-slate-50">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
               {roles.length} rôles configurés
             </p>
           </div>
@@ -199,20 +199,20 @@ export default function RolesPage() {
                 <li key={role.id}>
                   <button
                     onClick={() => selectRole(role)}
-                    className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition flex items-start justify-between gap-2 ${selectedRole?.id === role.id ? 'bg-blue-50 border-l-2 border-[#1a5276]' : ''}`}
+                    className={`w-full text-left px-4 py-3 hover:bg-slate-50 transition flex items-start justify-between gap-2 ${selectedRole?.id === role.id ? 'bg-blue-50 border-l-2 border-[#1a5276]' : ''}`}
                   >
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-sm font-medium text-gray-800 truncate">
+                        <span className="text-sm font-medium text-slate-800 truncate">
                           {role.display_name}
                         </span>
                         {role.is_system && (
-                          <span title="Rôle système"><Lock size={11} className="text-gray-400 shrink-0" /></span>
+                          <span title="Rôle système"><Lock size={11} className="text-slate-400 shrink-0" /></span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-400 font-mono mt-0.5">{role.name}</p>
+                      <p className="text-xs text-slate-400 font-mono mt-0.5">{role.name}</p>
                     </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full border font-medium shrink-0 ${ROLE_COLORS[role.name] ?? 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full border font-medium shrink-0 ${ROLE_COLORS[role.name] ?? 'bg-slate-100 text-slate-600 border-slate-200'}`}>
                       {role.permissions_count}
                     </span>
                   </button>
@@ -226,21 +226,21 @@ export default function RolesPage() {
         {selectedRole ? (
           <div className="flex-1 min-w-0 space-y-4">
             {/* Header rôle sélectionné */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <Shield size={18} className="text-[#1a5276]" />
-                    <h2 className="text-lg font-bold text-gray-800">{selectedRole.display_name}</h2>
+                    <h2 className="text-lg font-bold text-slate-800">{selectedRole.display_name}</h2>
                     {selectedRole.is_system && (
                       <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1">
                         <Lock size={10} /> Système
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-gray-400 font-mono mt-0.5">{selectedRole.name}</p>
+                  <p className="text-xs text-slate-400 font-mono mt-0.5">{selectedRole.name}</p>
                   {selectedRole.description && (
-                    <p className="text-sm text-gray-500 mt-1">{selectedRole.description}</p>
+                    <p className="text-[13px] text-slate-500 mt-1">{selectedRole.description}</p>
                   )}
                 </div>
                 <div className="flex gap-2">
@@ -273,10 +273,10 @@ export default function RolesPage() {
                 <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#1a5276] border-t-transparent" />
               </div>
             ) : (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="px-5 py-3 border-b bg-gray-50 flex items-center justify-between">
-                  <p className="text-sm font-semibold text-gray-700">Permissions par module</p>
-                  <p className="text-xs text-gray-400">
+              <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 overflow-hidden">
+                <div className="px-5 py-3 border-b bg-slate-50 flex items-center justify-between">
+                  <p className="text-sm font-semibold text-slate-700">Permissions par module</p>
+                  <p className="text-xs text-slate-400">
                     {localPerms.size} / {allPermissions.length} permissions activées
                   </p>
                 </div>
@@ -299,7 +299,7 @@ export default function RolesPage() {
                               className={`w-4 h-4 rounded border flex items-center justify-center transition ${
                                 allOn  ? 'bg-[#1a5276] border-[#1a5276]' :
                                 someOn ? 'bg-[#1a5276]/30 border-[#1a5276]' :
-                                         'border-gray-300 hover:border-[#1a5276]'
+                                         'border-slate-300 hover:border-[#1a5276]'
                               }`}
                             >
                               {(allOn || someOn) && (
@@ -311,11 +311,11 @@ export default function RolesPage() {
                                 </svg>
                               )}
                             </button>
-                            <span className="text-sm font-semibold text-gray-700">
+                            <span className="text-sm font-semibold text-slate-700">
                               {MODULE_LABELS[module] ?? module}
                             </span>
                           </div>
-                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${active > 0 ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-400'}`}>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${active > 0 ? 'bg-blue-50 text-blue-700' : 'bg-slate-100 text-slate-400'}`}>
                             {active}/{total}
                           </span>
                         </div>
@@ -327,7 +327,7 @@ export default function RolesPage() {
                               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border cursor-pointer text-sm transition select-none ${
                                 localPerms.has(perm.id)
                                   ? 'bg-[#1a5276] border-[#1a5276] text-white'
-                                  : 'border-gray-200 text-gray-600 hover:border-[#1a5276] hover:bg-blue-50'
+                                  : 'border-slate-200 text-slate-600 hover:border-[#1a5276] hover:bg-blue-50'
                               }`}
                             >
                               <input
@@ -348,10 +348,10 @@ export default function RolesPage() {
             )}
           </div>
         ) : (
-          <div className="flex-1 flex items-center justify-center h-64 bg-white rounded-xl border border-gray-100 border-dashed">
+          <div className="flex-1 flex items-center justify-center h-64 bg-white rounded-xl border border-slate-100 border-dashed">
             <div className="text-center">
-              <Shield size={40} className="mx-auto text-gray-200 mb-3" />
-              <p className="text-gray-400 text-sm">Sélectionnez un rôle pour gérer ses permissions</p>
+              <Shield size={40} className="mx-auto text-slate-200 mb-3" />
+              <p className="text-slate-400 text-sm">Sélectionnez un rôle pour gérer ses permissions</p>
             </div>
           </div>
         )}
@@ -412,10 +412,10 @@ function CreateRoleModal({
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-5 border-b">
-          <h2 className="font-bold text-gray-800 flex items-center gap-2">
+          <h2 className="font-bold text-slate-800 flex items-center gap-2">
             <Shield size={18} className="text-[#1a5276]" /> Nouveau rôle
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
             <X size={20} />
           </button>
         </div>
@@ -423,39 +423,39 @@ function CreateRoleModal({
         <div className="overflow-y-auto flex-1 p-5 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Identifiant <span className="text-red-500">*</span>
               </label>
               <input value={name} onChange={e => setName(e.target.value.toLowerCase().replace(/[^a-z_]/g, ''))}
                 placeholder="ex: agent_douane"
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
-              <p className="text-xs text-gray-400 mt-0.5">Lettres minuscules et _ uniquement</p>
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
+              <p className="text-xs text-slate-400 mt-0.5">Lettres minuscules et _ uniquement</p>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Nom affiché <span className="text-red-500">*</span>
               </label>
               <input value={displayName} onChange={e => setDisplayName(e.target.value)}
                 placeholder="ex: Agent Douane"
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Description</label>
             <input value={description} onChange={e => setDescription(e.target.value)}
               placeholder="Rôle pour..."
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
+              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
           </div>
 
           {/* Permissions initiales */}
           <div>
-            <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-3">
+            <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide mb-3">
               Permissions initiales ({selected.size} sélectionnées)
             </p>
-            <div className="space-y-3 border border-gray-100 rounded-lg p-4 bg-gray-50">
+            <div className="space-y-3 border border-slate-100 rounded-lg p-4 bg-slate-50">
               {Object.entries(permissions).map(([module, perms]) => (
                 <div key={module}>
-                  <p className="text-xs font-medium text-gray-500 mb-1.5">
+                  <p className="text-xs font-medium text-slate-500 mb-1.5">
                     {MODULE_LABELS[module] ?? module}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -464,7 +464,7 @@ function CreateRoleModal({
                         className={`flex items-center gap-1 px-2.5 py-1 rounded-md border cursor-pointer text-xs transition select-none ${
                           selected.has(p.id)
                             ? 'bg-[#1a5276] border-[#1a5276] text-white'
-                            : 'border-gray-200 text-gray-500 hover:border-[#1a5276] bg-white'
+                            : 'border-slate-200 text-slate-500 hover:border-[#1a5276] bg-white'
                         }`}>
                         <input type="checkbox" className="sr-only"
                           checked={selected.has(p.id)} onChange={() => toggle(p.id)} />
@@ -479,7 +479,7 @@ function CreateRoleModal({
         </div>
 
         <div className="flex justify-end gap-3 p-5 border-t">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-600 border rounded-lg hover:bg-gray-50">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-slate-600 border rounded-lg hover:bg-slate-50">
             Annuler
           </button>
           <button
