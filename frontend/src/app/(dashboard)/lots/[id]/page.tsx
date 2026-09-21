@@ -12,6 +12,7 @@ import {
   RefreshCw, ChevronDown, ChevronUp,
 } from 'lucide-react'
 import { formatDate, formatDateTime } from '@/lib/utils'
+import { useAuthStore, hasPermission } from '@/stores/authStore'
 
 const statutStyle: Record<string, string> = {
   brouillon:    'bg-slate-100 text-slate-700',
@@ -144,6 +145,10 @@ export default function LotDetailPage() {
   const router = useRouter()
   const qc     = useQueryClient()
   const lotId  = params.id as string
+  const { user } = useAuthStore()
+  const canValidate = hasPermission(user, 'lots.validate')
+  const canShip     = hasPermission(user, 'lots.ship')
+  const canUpdate   = hasPermission(user, 'lots.update')
 
   const [tab,         setTab]         = useState<'passeports' | 'qr' | 'historique'>('passeports')
   const [showDetails, setShowDetails] = useState(false)
@@ -212,14 +217,14 @@ export default function LotDetailPage() {
               {lot.statut_label ?? lot.statut}
             </span>
             {/* Actions */}
-            {lot.statut === 'brouillon' && (
+            {lot.statut === 'brouillon' && canValidate && (
               <button onClick={() => valider.mutate()} disabled={valider.isPending}
                 className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50">
                 {valider.isPending ? <RefreshCw size={13} className="animate-spin" /> : <CheckCircle size={13} />}
                 Valider
               </button>
             )}
-            {lot.statut === 'valide' && (
+            {lot.statut === 'valide' && canShip && (
               <button onClick={() => expedier.mutate()} disabled={expedier.isPending}
                 className="flex items-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 disabled:opacity-50">
                 {expedier.isPending ? <RefreshCw size={13} className="animate-spin" /> : <Send size={13} />}
@@ -329,7 +334,7 @@ export default function LotDetailPage() {
               <div className="text-center py-8 text-slate-400">
                 <Package size={32} className="mx-auto mb-2 opacity-40" />
                 <p className="text-sm">Aucun passeport dans ce lot</p>
-                {lot.statut === 'brouillon' && (
+                {lot.statut === 'brouillon' && canUpdate && (
                   <Link href={`/lots/${lot.id}/ajouter`} className="mt-2 inline-block text-[#1a5276] text-sm hover:underline">
                     Ajouter des passeports →
                   </Link>

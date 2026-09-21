@@ -7,6 +7,7 @@ use App\Http\Requests\Ambassade\StoreAmbassadeRequest;
 use App\Http\Requests\Ambassade\UpdateAmbassadeRequest;
 use App\Models\Ambassade;
 use App\Models\AuditLog;
+use App\Models\Pays;
 use Illuminate\Http\Request;
 
 class AmbassadeController extends Controller
@@ -27,7 +28,10 @@ class AmbassadeController extends Controller
     {
         $this->authorize('create', Ambassade::class);
 
-        $ambassade = Ambassade::create($request->validated());
+        $data = $request->validated();
+        $data['pays'] = Pays::findOrFail($data['pays_id'])->nom;
+
+        $ambassade = Ambassade::create($data);
         AuditLog::record('ambassade.create', 'Ambassade', $ambassade->id, null, $ambassade->toArray());
 
         return response()->json($ambassade, 201);
@@ -42,8 +46,12 @@ class AmbassadeController extends Controller
     {
         $this->authorize('update', $ambassade);
 
-        $old = $ambassade->toArray();
-        $ambassade->update($request->validated());
+        $old  = $ambassade->toArray();
+        $data = $request->validated();
+        if (isset($data['pays_id'])) {
+            $data['pays'] = Pays::findOrFail($data['pays_id'])->nom;
+        }
+        $ambassade->update($data);
         AuditLog::record('ambassade.update', 'Ambassade', $ambassade->id, $old, $ambassade->fresh()->toArray());
 
         return response()->json($ambassade);

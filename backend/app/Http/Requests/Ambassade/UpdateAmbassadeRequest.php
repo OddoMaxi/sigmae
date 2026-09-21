@@ -17,7 +17,7 @@ class UpdateAmbassadeRequest extends FormRequest
         return [
             'code'          => ['sometimes', 'string', 'max:10', Rule::unique('ambassades')->ignore($this->route('ambassade'))],
             'nom'           => 'sometimes|string|max:200',
-            'pays'          => 'sometimes|string|max:100',
+            'pays_id'       => 'sometimes|integer|exists:pays,id',
             'ville'         => 'sometimes|string|max:100',
             'email_contact' => 'nullable|email|max:255',
             'responsable'   => 'nullable|string|max:150',

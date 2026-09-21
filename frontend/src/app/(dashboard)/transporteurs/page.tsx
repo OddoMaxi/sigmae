@@ -8,6 +8,7 @@ import { z } from 'zod'
 import api from '@/lib/api'
 import { Plus, Truck, Edit2, X, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useAuthStore, hasPermission } from '@/stores/authStore'
 
 const schema = z.object({
   nom:       z.string().min(2),
@@ -20,6 +21,9 @@ type FormData = z.infer<typeof schema>
 
 export default function TransporteursPage() {
   const qc = useQueryClient()
+  const { user } = useAuthStore()
+  const canCreate = hasPermission(user, 'transporteurs.create')
+  const canUpdate = hasPermission(user, 'transporteurs.update')
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing]   = useState<number | null>(null)
 
@@ -51,13 +55,15 @@ export default function TransporteursPage() {
           <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Transporteurs</h1>
           <p className="text-sm text-slate-500">Sociétés de transport des lots</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
-          <Plus size={15} /> Nouveau transporteur
-        </button>
+        {canCreate && (
+          <button onClick={() => setShowForm(!showForm)}
+            className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
+            <Plus size={15} /> Nouveau transporteur
+          </button>
+        )}
       </div>
 
-      {showForm && (
+      {showForm && canCreate && (
         <div className="bg-white rounded-xl shadow-sm border border-[#1a5276]/20 p-6">
           <h3 className="font-semibold text-slate-700 mb-4">Nouveau transporteur</h3>
           <form onSubmit={handleSubmit((d) => create.mutate(d))} className="grid grid-cols-2 gap-4">
@@ -124,10 +130,12 @@ export default function TransporteursPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <button onClick={() => toggle.mutate({ id: t.id, is_active: t.is_active })}
-                      className="text-xs text-slate-500 hover:text-[#1a5276] underline">
-                      {t.is_active ? 'Désactiver' : 'Activer'}
-                    </button>
+                    {canUpdate && (
+                      <button onClick={() => toggle.mutate({ id: t.id, is_active: t.is_active })}
+                        className="text-xs text-slate-500 hover:text-[#1a5276] underline">
+                        {t.is_active ? 'Désactiver' : 'Activer'}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

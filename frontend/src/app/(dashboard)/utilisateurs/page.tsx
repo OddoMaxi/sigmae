@@ -8,6 +8,7 @@ import { z } from 'zod'
 import api from '@/lib/api'
 import { Plus, UserCircle, ToggleLeft, ToggleRight, X, Check, Pencil } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useAuthStore, hasPermission } from '@/stores/authStore'
 
 /* ─── Schémas ────────────────────────────────────────────────────────────── */
 
@@ -164,6 +165,10 @@ function EditModal({ user, roles, ambassades, onClose }: {
 
 export default function UtilisateursPage() {
   const qc = useQueryClient()
+  const { user: currentUser } = useAuthStore()
+  const canCreate = hasPermission(currentUser, 'users.create')
+  const canUpdate = hasPermission(currentUser, 'users.update')
+  const canToggle = hasPermission(currentUser, 'users.toggle_status')
   const [showCreate, setShowCreate] = useState(false)
   const [editingUser, setEditingUser] = useState<any>(null)
 
@@ -224,14 +229,16 @@ export default function UtilisateursPage() {
           <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Utilisateurs</h1>
           <p className="text-sm text-slate-500">Gestion des comptes et droits d'accès</p>
         </div>
-        <button onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
-          <Plus size={15} /> Nouvel utilisateur
-        </button>
+        {canCreate && (
+          <button onClick={() => setShowCreate(!showCreate)}
+            className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
+            <Plus size={15} /> Nouvel utilisateur
+          </button>
+        )}
       </div>
 
       {/* Formulaire création */}
-      {showCreate && (
+      {showCreate && canCreate && (
         <div className="bg-white rounded-xl shadow-sm border border-[#1a5276]/20 p-6">
           <h3 className="font-semibold text-slate-700 mb-4">Créer un utilisateur</h3>
           <form onSubmit={handleSubmit((d) => create.mutate(d))} className="grid grid-cols-2 gap-4">
@@ -318,6 +325,7 @@ export default function UtilisateursPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
+                      {canUpdate && (
                       <button
                         onClick={() => setEditingUser(u)}
                         className="text-slate-400 hover:text-[#1a5276] transition"
@@ -325,6 +333,8 @@ export default function UtilisateursPage() {
                       >
                         <Pencil size={16} />
                       </button>
+                      )}
+                      {canToggle && (
                       <button
                         onClick={() => toggle.mutate(u.id)}
                         className="text-slate-400 hover:text-[#1a5276] transition"
@@ -334,6 +344,7 @@ export default function UtilisateursPage() {
                           ? <ToggleRight size={20} className="text-green-500" />
                           : <ToggleLeft size={20} />}
                       </button>
+                      )}
                     </div>
                   </td>
                 </tr>

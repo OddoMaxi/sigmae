@@ -16,7 +16,7 @@ class StoreAmbassadeRequest extends FormRequest
         return [
             'code'          => 'required|string|max:10|unique:ambassades,code',
             'nom'           => 'required|string|max:200',
-            'pays'          => 'required|string|max:100',
+            'pays_id'       => 'required|integer|exists:pays,id',
             'ville'         => 'required|string|max:100',
             'email_contact' => 'nullable|email|max:255',
             'responsable'   => 'nullable|string|max:150',
@@ -26,10 +26,11 @@ class StoreAmbassadeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'code.unique'  => 'Ce code d\'ambassade est déjà utilisé.',
-            'code.required'=> 'Le code est obligatoire.',
-            'nom.required' => 'Le nom est obligatoire.',
-            'pays.required'=> 'Le pays est obligatoire.',
+            'code.unique'    => 'Ce code d\'ambassade est déjà utilisé.',
+            'code.required'  => 'Le code est obligatoire.',
+            'nom.required'   => 'Le nom est obligatoire.',
+            'pays_id.required'=> 'Le pays est obligatoire.',
+            'pays_id.exists' => 'Le pays sélectionné est invalide.',
             'ville.required'=> 'La ville est obligatoire.',
         ];
     }

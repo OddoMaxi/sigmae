@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/lib/api'
 import { Shield, Plus, Trash2, Save, ChevronDown, ChevronRight, Lock, Users, X } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useAuthStore, hasPermission } from '@/stores/authStore'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -83,6 +84,8 @@ const ROLE_COLORS: Record<string, string> = {
 
 export default function RolesPage() {
   const qc = useQueryClient()
+  const { user } = useAuthStore()
+  const canManage = hasPermission(user, 'roles.manage')
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const [showCreate,   setShowCreate]   = useState(false)
   const [dirty,        setDirty]        = useState<Set<number>>(new Set())
@@ -174,10 +177,12 @@ export default function RolesPage() {
           <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Rôles &amp; Permissions</h1>
           <p className="text-sm text-slate-500">Gestion des rôles et de leurs droits d'accès</p>
         </div>
-        <button onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
-          <Plus size={15} /> Nouveau rôle
-        </button>
+        {canManage && (
+          <button onClick={() => setShowCreate(true)}
+            className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
+            <Plus size={15} /> Nouveau rôle
+          </button>
+        )}
       </div>
 
       <div className="flex gap-6 items-start">
@@ -244,7 +249,7 @@ export default function RolesPage() {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  {dirty.size > 0 && (
+                  {canManage && dirty.size > 0 && (
                     <button
                       onClick={() => savePerms.mutate(Array.from(localPerms))}
                       disabled={savePerms.isPending}
@@ -253,7 +258,7 @@ export default function RolesPage() {
                       {savePerms.isPending ? 'Sauvegarde...' : `Sauvegarder (${dirty.size} modif.)`}
                     </button>
                   )}
-                  {!selectedRole.is_system && (
+                  {canManage && !selectedRole.is_system && (
                     <button
                       onClick={() => {
                         if (confirm(`Supprimer le rôle « ${selectedRole.display_name} » ?`))
@@ -295,12 +300,13 @@ export default function RolesPage() {
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
                             <button
-                              onClick={() => toggleModule(perms)}
+                              onClick={() => canManage && toggleModule(perms)}
+                              disabled={!canManage}
                               className={`w-4 h-4 rounded border flex items-center justify-center transition ${
                                 allOn  ? 'bg-[#1a5276] border-[#1a5276]' :
                                 someOn ? 'bg-[#1a5276]/30 border-[#1a5276]' :
                                          'border-slate-300 hover:border-[#1a5276]'
-                              }`}
+                              } ${!canManage ? 'cursor-not-allowed opacity-70' : ''}`}
                             >
                               {(allOn || someOn) && (
                                 <svg viewBox="0 0 10 10" className="w-2.5 h-2.5 text-white fill-current">
@@ -324,17 +330,18 @@ export default function RolesPage() {
                         <div className="flex flex-wrap gap-2 ml-6">
                           {perms.map(perm => (
                             <label key={perm.id}
-                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border cursor-pointer text-sm transition select-none ${
+                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm transition select-none ${
                                 localPerms.has(perm.id)
                                   ? 'bg-[#1a5276] border-[#1a5276] text-white'
                                   : 'border-slate-200 text-slate-600 hover:border-[#1a5276] hover:bg-blue-50'
-                              }`}
+                              } ${canManage ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}
                             >
                               <input
                                 type="checkbox"
                                 className="sr-only"
                                 checked={localPerms.has(perm.id)}
-                                onChange={() => togglePerm(perm.id)}
+                                disabled={!canManage}
+                                onChange={() => canManage && togglePerm(perm.id)}
                               />
                               {ACTION_LABELS[perm.action] ?? perm.action}
                             </label>

@@ -6,6 +6,7 @@ import api from '@/lib/api'
 import { Plus, Package, Eye, FileDown, CheckCircle, Send } from 'lucide-react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import { useAuthStore, hasPermission } from '@/stores/authStore'
 
 const statutStyle: Record<string, string> = {
   brouillon:   'bg-slate-100 text-slate-700',
@@ -34,6 +35,10 @@ export default function LotsPage() {
   const [statut, setStatut] = useState('')
   const [page,   setPage]   = useState(1)
   const qc = useQueryClient()
+  const { user } = useAuthStore()
+  const canCreate   = hasPermission(user, 'lots.create')
+  const canValidate = hasPermission(user, 'lots.validate')
+  const canShip     = hasPermission(user, 'lots.ship')
 
   const { data, isLoading } = useQuery({
     queryKey: ['lots', statut, page],
@@ -60,10 +65,12 @@ export default function LotsPage() {
           <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Lots d'expédition</h1>
           <p className="text-sm text-slate-500">Création et suivi des lots vers les ambassades</p>
         </div>
-        <Link href="/lots/nouveau"
-          className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
-          <Plus size={15} /> Nouveau lot
-        </Link>
+        {canCreate && (
+          <Link href="/lots/nouveau"
+            className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
+            <Plus size={15} /> Nouveau lot
+          </Link>
+        )}
       </div>
 
       {/* Filtre statut */}
@@ -121,14 +128,14 @@ export default function LotsPage() {
                       <Link href={`/lots/${lot.id}`} className="text-[#1a5276] hover:underline">
                         <Eye size={15} />
                       </Link>
-                      {lot.statut === 'brouillon' && (
+                      {lot.statut === 'brouillon' && canValidate && (
                         <button onClick={() => valider.mutate(lot.id)}
                           title="Valider"
                           className="text-blue-600 hover:text-blue-800">
                           <CheckCircle size={15} />
                         </button>
                       )}
-                      {lot.statut === 'valide' && (
+                      {lot.statut === 'valide' && canShip && (
                         <button onClick={() => expedier.mutate(lot.id)}
                           title="Expédier"
                           className="text-green-600 hover:text-green-800">

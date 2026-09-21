@@ -13,7 +13,14 @@ class AnomalieController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Anomalie::class);
+
+        $user = $request->user();
+
         $anomalies = Anomalie::with(['passeport', 'lot.ambassade', 'signalePar'])
+            ->when($user->isScopedToAmbassade(), fn ($q) => $q->whereHas(
+                'lot', fn ($q2) => $q2->where('ambassade_id', $user->ambassade_id)
+            ))
             ->when($request->statut, fn($q) => $q->where('statut', $request->statut))
             ->when($request->type, fn($q) => $q->where('type', $request->type))
             ->when($request->ambassade_id, fn($q) => $q->whereHas(
@@ -37,6 +44,8 @@ class AnomalieController extends Controller
 
     public function show(Anomalie $anomalie)
     {
+        $this->authorize('view', $anomalie);
+
         return response()->json($anomalie->load(['passeport', 'lot.ambassade', 'signalePar', 'resoluPar']));
     }
 

@@ -76,6 +76,20 @@ class ReceptionMAEController extends Controller
                     'statut'  => $passeport->statut,
                 ], 422);
             }
+            if (! preg_match('/^[A-Z0-9]{6,15}$/', $numero)) {
+                return response()->json([
+                    'code'    => 'numero_invalide',
+                    'message' => 'Le numéro de passeport doit contenir entre 6 et 15 lettres/chiffres, sans espace ni caractère spécial.',
+                    'statut'  => $passeport->statut,
+                ], 422);
+            }
+            if (Passeport::where('numero', $numero)->exists()) {
+                return response()->json([
+                    'code'    => 'numero_doublon',
+                    'message' => "Ce numéro de passeport ({$numero}) existe déjà dans le système.",
+                    'statut'  => $passeport->statut,
+                ], 422);
+            }
             $passeport->update([
                 'numero'          => $numero,
                 'statut'          => Passeport::STATUT_IMPRIME,

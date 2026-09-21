@@ -8,11 +8,12 @@ import { z } from 'zod'
 import api from '@/lib/api'
 import { Plus, Building2, Edit2, X, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useAuthStore, hasPermission } from '@/stores/authStore'
 
 const schema = z.object({
   code:          z.string().min(2).max(10).toUpperCase(),
   nom:           z.string().min(2),
-  pays:          z.string().min(2),
+  pays_id:       z.number({ message: 'Le pays est obligatoire' }).min(1, 'Le pays est obligatoire'),
   ville:         z.string().min(2),
   email_contact: z.string().email().optional().or(z.literal('')),
   responsable:   z.string().optional(),
@@ -24,9 +25,14 @@ function AmbassadeForm({ initial, onSave, onCancel }: {
   onSave: (data: FormData) => void
   onCancel: () => void
 }) {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
+  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: initial,
+  })
+
+  const { data: pays } = useQuery({
+    queryKey: ['pays-select'],
+    queryFn:  () => api.get('/pays').then(r => r.data),
   })
 
   return (
@@ -34,7 +40,6 @@ function AmbassadeForm({ initial, onSave, onCancel }: {
       {[
         { name: 'code',  label: 'Code (ex: FR-PAR)', col: 1 },
         { name: 'nom',   label: 'Nom officiel',      col: 1 },
-        { name: 'pays',  label: 'Pays',              col: 1 },
         { name: 'ville', label: 'Ville',             col: 1 },
         { name: 'email_contact', label: 'Email contact', col: 2 },
         { name: 'responsable',   label: 'Responsable',   col: 2 },
@@ -50,6 +55,21 @@ function AmbassadeForm({ initial, onSave, onCancel }: {
           )}
         </div>
       ))}
+
+      <div>
+        <label className="block text-xs font-medium text-slate-600 mb-1">Pays</label>
+        <select
+          defaultValue={initial?.pays_id ?? ''}
+          onChange={(e) => setValue('pays_id', Number(e.target.value))}
+          className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]">
+          <option value="" disabled>Sélectionner un pays...</option>
+          {pays?.map((p: any) => (
+            <option key={p.id} value={p.id}>{p.nom}</option>
+          ))}
+        </select>
+        {errors.pays_id && <p className="text-red-500 text-xs mt-0.5">{errors.pays_id.message}</p>}
+      </div>
+
       <div className="col-span-2 flex justify-end gap-2 pt-2">
         <button type="button" onClick={onCancel}
           className="flex items-center gap-1 px-4 py-2 text-sm border rounded-lg hover:bg-slate-50">
@@ -66,8 +86,12 @@ function AmbassadeForm({ initial, onSave, onCancel }: {
 
 export default function AmbassadesPage() {
   const qc = useQueryClient()
+  const { user } = useAuthStore()
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<number | null>(null)
+
+  const canCreate = hasPermission(user, 'ambassades.create')
+  const canUpdate = hasPermission(user, 'ambassades.update')
 
   const { data = [], isLoading } = useQuery({
     queryKey: ['ambassades'],
@@ -93,13 +117,15 @@ export default function AmbassadesPage() {
           <h1 className="text-[22px] font-bold text-[color:var(--color-navy-900)] tracking-tight">Ambassades & Consulats</h1>
           <p className="text-sm text-slate-500">Gestion des représentations diplomatiques</p>
         </div>
-        <button onClick={() => { setShowForm(true); setEditing(null) }}
-          className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
-          <Plus size={15} /> Nouvelle ambassade
-        </button>
+        {canCreate && (
+          <button onClick={() => { setShowForm(true); setEditing(null) }}
+            className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360]">
+            <Plus size={15} /> Nouvelle ambassade
+          </button>
+        )}
       </div>
 
-      {showForm && (
+      {showForm && canCreate && (
         <div className="bg-white rounded-xl shadow-sm border border-[#1a5276]/20 p-6">
           <h3 className="font-semibold text-slate-700 mb-4">Nouvelle ambassade</h3>
           <AmbassadeForm onSave={(d) => create.mutate(d)} onCancel={() => setShowForm(false)} />
@@ -113,9 +139,9 @@ export default function AmbassadesPage() {
           </div>
         ) : data.map((a: any) => (
           <div key={a.id} className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 p-5">
-            {editing === a.id ? (
+            {editing === a.id && canUpdate ? (
               <AmbassadeForm
-                initial={a}
+                initial={{ ...a, pays_id: a.pays_id }}
                 onSave={(d) => update.mutate({ ...d, id: a.id })}
                 onCancel={() => setEditing(null)}
               />
@@ -134,10 +160,12 @@ export default function AmbassadesPage() {
                     <span className={`text-xs px-2 py-0.5 rounded-full ${a.is_active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
                       {a.is_active ? 'Active' : 'Inactive'}
                     </span>
-                    <button onClick={() => setEditing(a.id)}
-                      className="p-1.5 text-slate-400 hover:text-[#1a5276] hover:bg-slate-100 rounded-lg transition">
-                      <Edit2 size={14} />
-                    </button>
+                    {canUpdate && (
+                      <button onClick={() => setEditing(a.id)}
+                        className="p-1.5 text-slate-400 hover:text-[#1a5276] hover:bg-slate-100 rounded-lg transition">
+                        <Edit2 size={14} />
+                      </button>
+                    )}
                   </div>
                 </div>
                 <h3 className="font-semibold text-slate-800">{a.nom}</h3>

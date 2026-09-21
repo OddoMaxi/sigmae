@@ -114,9 +114,13 @@ class EnrolementController extends Controller
     {
         abort_unless($passeport->statut === Passeport::STATUT_ENROLEE, 422, 'Ce dossier n\'est pas en attente d\'impression.');
 
+        $request->merge(['numero' => strtoupper(trim((string) $request->numero))]);
+
         $request->validate([
-            'numero'           => ['required', 'string', 'max:50', 'unique:passeports,numero'],
+            'numero'           => ['required', 'string', 'regex:/^[A-Z0-9]{6,15}$/', 'unique:passeports,numero'],
             'date_impression'  => ['nullable', 'date'],
+        ], [
+            'numero.regex' => 'Le numéro de passeport doit contenir entre 6 et 15 lettres/chiffres, sans espace ni caractère spécial.',
         ]);
 
         $passeport->update([
