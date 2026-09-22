@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import api from '@/lib/api'
+import { downloadFile } from '@/lib/download'
 import { Search, Plus, Upload, Download, Eye } from 'lucide-react'
 import Link from 'next/link'
 
@@ -96,10 +97,11 @@ export default function PasseportsPage() {
             <option key={s} value={s}>{s ? (STATUT_LABELS[s] ?? s) : 'Tous les statuts'}</option>
           ))}
         </select>
-        <a href="/api/export/passeports?format=xlsx" target="_blank"
+        <button
+          onClick={() => downloadFile('/export/passeports', { format: 'xlsx', statut, search }, 'passeports.xlsx')}
           className="flex items-center gap-2 border border-slate-300 text-slate-600 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
           <Download size={15} /> Export
-        </a>
+        </button>
       </div>
 
       {/* Table */}

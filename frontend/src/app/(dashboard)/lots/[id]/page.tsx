@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/lib/api'
+import { downloadFile } from '@/lib/download'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
 import {
@@ -85,12 +86,11 @@ function QrCodeTab({ lot }: { lot: any }) {
           className="flex items-center gap-2 bg-[#1a5276] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#154360] disabled:opacity-50">
           <QrCode size={14} /> {imgSrc ? 'Rafraîchir' : 'Afficher le QR'}
         </button>
-        <a
-          href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/lots/${lot.id}/qr-code`}
-          target="_blank"
+        <button
+          onClick={() => downloadFile(`/lots/${lot.id}/qr-code`, {}, `qr-${lot.reference}.png`)}
           className="flex items-center gap-2 border text-slate-600 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
           <FileDown size={14} /> Télécharger PNG
-        </a>
+        </button>
       </div>
       <p className="text-xs text-slate-400 text-center max-w-xs">
         Scanner ce QR code depuis l'ambassade de réception pour confirmer la livraison.
