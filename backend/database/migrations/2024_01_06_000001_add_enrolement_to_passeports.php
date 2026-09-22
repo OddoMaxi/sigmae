@@ -25,24 +25,33 @@ return new class extends Migration
         });
 
         // Ajouter 'enrolee' au CHECK constraint PostgreSQL
-        DB::statement('ALTER TABLE passeports DROP CONSTRAINT IF EXISTS passeports_statut_check');
-        DB::statement("
-            ALTER TABLE passeports
-            ADD CONSTRAINT passeports_statut_check CHECK (statut IN (
-                'enrolee',
-                'imprime',
-                'recu_mae',
-                'en_stock',
-                'en_lot',
-                'expedie',
-                'en_transit',
-                'recu_ambassade',
-                'disponible_retrait',
-                'remis_citoyen',
-                'anomalie',
-                'livre'
-            ))
-        ");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE passeports DROP CONSTRAINT IF EXISTS passeports_statut_check');
+            DB::statement("
+                ALTER TABLE passeports
+                ADD CONSTRAINT passeports_statut_check CHECK (statut IN (
+                    'enrolee',
+                    'imprime',
+                    'recu_mae',
+                    'en_stock',
+                    'en_lot',
+                    'expedie',
+                    'en_transit',
+                    'recu_ambassade',
+                    'disponible_retrait',
+                    'remis_citoyen',
+                    'anomalie',
+                    'livre'
+                ))
+            ");
+        } else {
+            Schema::table('passeports', function (Blueprint $table) {
+                $table->enum('statut', [
+                    'enrolee', 'imprime', 'recu_mae', 'en_stock', 'en_lot', 'expedie', 'en_transit',
+                    'recu_ambassade', 'disponible_retrait', 'remis_citoyen', 'anomalie', 'livre',
+                ])->default('en_stock')->change();
+            });
+        }
     }
 
     public function down(): void
@@ -53,14 +62,23 @@ return new class extends Migration
             $table->dropColumn(['enrolled_at', 'enrolled_by']);
         });
 
-        DB::statement('ALTER TABLE passeports DROP CONSTRAINT IF EXISTS passeports_statut_check');
-        DB::statement("
-            ALTER TABLE passeports
-            ADD CONSTRAINT passeports_statut_check CHECK (statut IN (
-                'imprime','recu_mae','en_stock','en_lot','expedie',
-                'en_transit','recu_ambassade','disponible_retrait',
-                'remis_citoyen','anomalie','livre'
-            ))
-        ");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE passeports DROP CONSTRAINT IF EXISTS passeports_statut_check');
+            DB::statement("
+                ALTER TABLE passeports
+                ADD CONSTRAINT passeports_statut_check CHECK (statut IN (
+                    'imprime','recu_mae','en_stock','en_lot','expedie',
+                    'en_transit','recu_ambassade','disponible_retrait',
+                    'remis_citoyen','anomalie','livre'
+                ))
+            ");
+        } else {
+            Schema::table('passeports', function (Blueprint $table) {
+                $table->enum('statut', [
+                    'imprime', 'recu_mae', 'en_stock', 'en_lot', 'expedie', 'en_transit',
+                    'recu_ambassade', 'disponible_retrait', 'remis_citoyen', 'anomalie', 'livre',
+                ])->default('en_stock')->change();
+            });
+        }
     }
 };

@@ -119,7 +119,7 @@ class AuthSeeder extends Seeder
 
         'agent_enrolement' => [
             'ambassades.view', 'pays.view',
-            'passeports.view', 'passeports.create',
+            'passeports.view',
             'enrolement.view', 'enrolement.create',
         ],
 

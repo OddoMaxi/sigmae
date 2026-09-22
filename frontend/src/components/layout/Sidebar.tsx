@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 const navItems = [
   { href: '/dashboard',     label: 'Tableau de bord',       icon: LayoutDashboard, permission: null },
   { href: '/guide',         label: 'Guide',                 icon: BookOpen,        permission: null },
-  { href: '/enrolements',   label: 'Enrôlements',           icon: Fingerprint,     permission: 'passeports.create' },
+  { href: '/enrolements',   label: 'Enrôlements',           icon: Fingerprint,     permission: 'enrolement.view' },
   { href: '/impression',    label: 'Impression',            icon: Printer,         permission: 'passeports.create' },
   { href: '/reception-mae', label: 'Réception MAE',         icon: ScanLine,        permission: 'passeports.create' },
   { href: '/retrait',       label: 'Retrait citoyens',      icon: HandCoins,       permission: 'lots.receive' },

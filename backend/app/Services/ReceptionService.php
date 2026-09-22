@@ -366,7 +366,11 @@ class ReceptionService
         $totalTraites = $confirmedCount + $problemCount;
 
         if ($totalTraites < $totalInLot) {
-            return 'en_transit'; // réception encore en cours (partielle)
+            // Réception encore en cours (partielle) : on ne change pas le statut du
+            // lot. 'en_transit' n'existe pas dans l'enum lots.statut (seul le
+            // statut du passeport connaît cet état) — l'écrire ferait échouer la
+            // contrainte CHECK en base sur toute réception partielle en un appel.
+            return $lot->statut;
         }
 
         if ($problemCount === 0) {

@@ -268,6 +268,8 @@ class PasseportController extends Controller
      */
     public function remettreAuCitoyen(RemettreAuCitoyenRequest $request, Passeport $passeport)
     {
+        $this->authorize('reception', $passeport->lot ?? $passeport);
+
         if (! $passeport->estDisponibleRetrait()) {
             throw ValidationException::withMessages([
                 'statut' => "Ce passeport doit être au statut DISPONIBLE_RETRAIT (statut actuel : {$passeport->statut_label}).",

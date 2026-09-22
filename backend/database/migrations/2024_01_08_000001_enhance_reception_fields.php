@@ -20,11 +20,19 @@ return new class extends Migration
         });
 
         // ── 3. lot_passeports : ajout du statut "manquant" ───────────────────
-        DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT IF EXISTS lot_passeports_statut_reception_check');
-        DB::statement(
-            "ALTER TABLE lot_passeports ADD CONSTRAINT lot_passeports_statut_reception_check
-             CHECK (statut_reception IN ('en_attente','confirme','anomalie','manquant'))"
-        );
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT IF EXISTS lot_passeports_statut_reception_check');
+            DB::statement(
+                "ALTER TABLE lot_passeports ADD CONSTRAINT lot_passeports_statut_reception_check
+                 CHECK (statut_reception IN ('en_attente','confirme','anomalie','manquant'))"
+            );
+        } else {
+            Schema::table('lot_passeports', function (Blueprint $table) {
+                $table->enum('statut_reception', ['en_attente', 'confirme', 'anomalie', 'manquant'])
+                      ->default('en_attente')
+                      ->change();
+            });
+        }
     }
 
     public function down(): void
@@ -37,10 +45,18 @@ return new class extends Migration
             $table->dropColumn('disponible_at');
         });
 
-        DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT IF EXISTS lot_passeports_statut_reception_check');
-        DB::statement(
-            "ALTER TABLE lot_passeports ADD CONSTRAINT lot_passeports_statut_reception_check
-             CHECK (statut_reception IN ('en_attente','confirme','anomalie'))"
-        );
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT IF EXISTS lot_passeports_statut_reception_check');
+            DB::statement(
+                "ALTER TABLE lot_passeports ADD CONSTRAINT lot_passeports_statut_reception_check
+                 CHECK (statut_reception IN ('en_attente','confirme','anomalie'))"
+            );
+        } else {
+            Schema::table('lot_passeports', function (Blueprint $table) {
+                $table->enum('statut_reception', ['en_attente', 'confirme', 'anomalie'])
+                      ->default('en_attente')
+                      ->change();
+            });
+        }
     }
 };

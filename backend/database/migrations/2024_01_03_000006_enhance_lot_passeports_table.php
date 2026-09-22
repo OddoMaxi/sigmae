@@ -15,19 +15,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Ajouter la colonne id en tant que séquence PostgreSQL
-        DB::statement('ALTER TABLE lot_passeports ADD COLUMN id BIGSERIAL');
+        // Le remplacement de la PK composite par un id bigserial est une opération
+        // ALTER TABLE spécifique à PostgreSQL (DROP/ADD CONSTRAINT). Aucun code de
+        // l'application ne référence lot_passeports.id : sur SQLite (tests), on
+        // conserve la PK composite d'origine et on saute cette étape sans impact.
+        if (DB::getDriverName() === 'pgsql') {
+            // 1. Ajouter la colonne id en tant que séquence PostgreSQL
+            DB::statement('ALTER TABLE lot_passeports ADD COLUMN id BIGSERIAL');
 
-        // 2. Supprimer l'ancienne PK composite
-        DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT lot_passeports_pkey');
+            // 2. Supprimer l'ancienne PK composite
+            DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT lot_passeports_pkey');
 
-        // 3. Définir id comme PK
-        DB::statement('ALTER TABLE lot_passeports ADD PRIMARY KEY (id)');
+            // 3. Définir id comme PK
+            DB::statement('ALTER TABLE lot_passeports ADD PRIMARY KEY (id)');
 
-        // 4. Garantir l'unicité lot+passeport
-        DB::statement('ALTER TABLE lot_passeports ADD CONSTRAINT lot_passeports_lot_id_passeport_id_unique UNIQUE (lot_id, passeport_id)');
+            // 4. Garantir l'unicité lot+passeport
+            DB::statement('ALTER TABLE lot_passeports ADD CONSTRAINT lot_passeports_lot_id_passeport_id_unique UNIQUE (lot_id, passeport_id)');
+        }
 
-        // 5. Ajouter les colonnes métier
+        // 5. Ajouter les colonnes métier (portable, identique sur tous les drivers)
         Schema::table('lot_passeports', function (Blueprint $table) {
             $table->smallInteger('position')->nullable()->comment('Ordre dans le lot');
             $table->text('notes')->nullable();
@@ -43,9 +49,11 @@ return new class extends Migration
             $table->dropColumn(['position', 'notes', 'statut_expedition']);
         });
 
-        DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT IF EXISTS lot_passeports_lot_id_passeport_id_unique');
-        DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT IF EXISTS lot_passeports_pkey');
-        DB::statement('ALTER TABLE lot_passeports DROP COLUMN IF EXISTS id');
-        DB::statement('ALTER TABLE lot_passeports ADD PRIMARY KEY (lot_id, passeport_id)');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT IF EXISTS lot_passeports_lot_id_passeport_id_unique');
+            DB::statement('ALTER TABLE lot_passeports DROP CONSTRAINT IF EXISTS lot_passeports_pkey');
+            DB::statement('ALTER TABLE lot_passeports DROP COLUMN IF EXISTS id');
+            DB::statement('ALTER TABLE lot_passeports ADD PRIMARY KEY (lot_id, passeport_id)');
+        }
     }
 };

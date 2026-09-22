@@ -33,23 +33,32 @@ return new class extends Migration
         });
 
         // Étendre le CHECK constraint des statuts (PostgreSQL : varchar + CHECK)
-        DB::statement('ALTER TABLE passeports DROP CONSTRAINT IF EXISTS passeports_statut_check');
-        DB::statement("
-            ALTER TABLE passeports
-            ADD CONSTRAINT passeports_statut_check CHECK (statut IN (
-                'imprime',
-                'recu_mae',
-                'en_stock',
-                'en_lot',
-                'expedie',
-                'en_transit',
-                'recu_ambassade',
-                'disponible_retrait',
-                'remis_citoyen',
-                'anomalie',
-                'livre'
-            ))
-        ");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE passeports DROP CONSTRAINT IF EXISTS passeports_statut_check');
+            DB::statement("
+                ALTER TABLE passeports
+                ADD CONSTRAINT passeports_statut_check CHECK (statut IN (
+                    'imprime',
+                    'recu_mae',
+                    'en_stock',
+                    'en_lot',
+                    'expedie',
+                    'en_transit',
+                    'recu_ambassade',
+                    'disponible_retrait',
+                    'remis_citoyen',
+                    'anomalie',
+                    'livre'
+                ))
+            ");
+        } else {
+            Schema::table('passeports', function (Blueprint $table) {
+                $table->enum('statut', [
+                    'imprime', 'recu_mae', 'en_stock', 'en_lot', 'expedie', 'en_transit',
+                    'recu_ambassade', 'disponible_retrait', 'remis_citoyen', 'anomalie', 'livre',
+                ])->default('en_stock')->change();
+            });
+        }
     }
 
     public function down(): void
@@ -63,12 +72,20 @@ return new class extends Migration
             ]);
         });
 
-        DB::statement('ALTER TABLE passeports DROP CONSTRAINT IF EXISTS passeports_statut_check');
-        DB::statement("
-            ALTER TABLE passeports
-            ADD CONSTRAINT passeports_statut_check CHECK (statut IN (
-                'en_stock','en_lot','expedie','livre','anomalie'
-            ))
-        ");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE passeports DROP CONSTRAINT IF EXISTS passeports_statut_check');
+            DB::statement("
+                ALTER TABLE passeports
+                ADD CONSTRAINT passeports_statut_check CHECK (statut IN (
+                    'en_stock','en_lot','expedie','livre','anomalie'
+                ))
+            ");
+        } else {
+            Schema::table('passeports', function (Blueprint $table) {
+                $table->enum('statut', ['en_stock', 'en_lot', 'expedie', 'livre', 'anomalie'])
+                      ->default('en_stock')
+                      ->change();
+            });
+        }
     }
 };
