@@ -94,7 +94,7 @@ class PasseportController extends Controller
             'ambassadeDestination',
             'lot.ambassade',
             'lot.transporteur',
-            'anomalies.signaledBy',
+            'anomalies.signalePar',
             'emailLogs',
         ]);
 

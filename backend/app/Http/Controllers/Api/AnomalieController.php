@@ -7,7 +7,9 @@ use App\Http\Requests\Anomalie\StoreAnomalieRequest;
 use App\Http\Requests\Anomalie\UpdateAnomalieRequest;
 use App\Models\Anomalie;
 use App\Models\AuditLog;
+use App\Models\Passeport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AnomalieController extends Controller
 {
@@ -66,10 +68,17 @@ class AnomalieController extends Controller
             $data['resolu_at'] = now();
         }
 
-        $anomalie->update($data);
+        DB::transaction(function () use ($anomalie, $data) {
+            $anomalie->update($data);
+
+            if (($data['statut'] ?? null) === 'resolu') {
+                $this->remettreEnStock($anomalie);
+            }
+        });
+
         AuditLog::record('anomalie.update', 'Anomalie', $anomalie->id, $old, $anomalie->fresh()->toArray());
 
-        return response()->json($anomalie->load(['passeport', 'lot', 'signalePar', 'resoluPar']));
+        return response()->json($anomalie->fresh()->load(['passeport', 'lot', 'signalePar', 'resoluPar']));
     }
 
     public function resoudre(Request $request, Anomalie $anomalie)
@@ -78,14 +87,37 @@ class AnomalieController extends Controller
         $request->validate(['note' => 'nullable|string']);
 
         $old = $anomalie->toArray();
-        $anomalie->update([
-            'statut'    => 'resolu',
-            'resolu_by' => auth()->id(),
-            'resolu_at' => now(),
-        ]);
+
+        DB::transaction(function () use ($anomalie) {
+            $anomalie->update([
+                'statut'    => 'resolu',
+                'resolu_by' => auth()->id(),
+                'resolu_at' => now(),
+            ]);
+
+            $this->remettreEnStock($anomalie);
+        });
 
         AuditLog::record('anomalie.resoudre', 'Anomalie', $anomalie->id, $old, $anomalie->fresh()->toArray());
 
-        return response()->json($anomalie);
+        return response()->json($anomalie->fresh());
+    }
+
+    /**
+     * Une fois l'anomalie résolue, le passeport concerné (s'il est toujours
+     * au statut ANOMALIE) retourne en stock central pour être réintégré dans
+     * un nouveau lot, plutôt que de rester bloqué indéfiniment.
+     */
+    private function remettreEnStock(Anomalie $anomalie): void
+    {
+        $passeport = $anomalie->passeport;
+
+        if ($passeport && $passeport->estAnomalie()) {
+            $passeport->transitionTo(
+                Passeport::STATUT_EN_STOCK,
+                "Anomalie résolue — passeport remis en stock central."
+            );
+            $passeport->update(['lot_id' => null]);
+        }
     }
 }
