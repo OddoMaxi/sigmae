@@ -27,6 +27,9 @@ class EnrolementController extends Controller
             ->when($user->isScopedToAmbassade(), fn ($q) =>
                 $q->where('ambassade_destination_id', $user->ambassade_id)
             )
+            ->when($request->ambassade_id, fn ($q) =>
+                $q->where('ambassade_destination_id', $request->ambassade_id)
+            )
             ->when($request->search, fn ($q) => $q->where(function ($q2) use ($request) {
                 $q2->where('nom_titulaire', 'ilike', "%{$request->search}%")
                    ->orWhere('prenom_titulaire', 'ilike', "%{$request->search}%")

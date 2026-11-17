@@ -38,9 +38,18 @@ export default function ImpressionPage() {
   useEffect(() => { refInputRef.current?.focus() }, [])
 
   // ── File d'attente (tous les enrôlements en attente) ──────────────────
+  const [ambassadeFilter, setAmbassadeFilter] = useState('')
+
+  const { data: ambassades } = useQuery({
+    queryKey: ['ambassades-select'],
+    queryFn:  () => api.get('/ambassades', { params: { per_page: 200 } }).then(r => r.data?.data ?? r.data),
+  })
+
   const { data: fileAttente, isLoading: loadingFile } = useQuery({
-    queryKey: ['enrolements-impression'],
-    queryFn:  () => api.get('/enrolements', { params: { per_page: 100 } }).then(r => r.data),
+    queryKey: ['enrolements-impression', ambassadeFilter],
+    queryFn:  () => api.get('/enrolements', {
+      params: { per_page: 100, ambassade_id: ambassadeFilter || undefined },
+    }).then(r => r.data),
     refetchInterval: 30_000,
   })
 
@@ -252,15 +261,27 @@ export default function ImpressionPage() {
         {/* ── Colonne droite : file d'attente ───────────────────────── */}
         <div className="col-span-2">
           <div className="bg-white rounded-[var(--radius-card)] border border-slate-200/70 overflow-hidden">
-            <div className="px-4 py-3 border-b bg-slate-50 flex items-center justify-between">
-              <span className="text-sm font-semibold text-slate-700">File d'attente</span>
-              <button
-                onClick={() => qc.invalidateQueries({ queryKey: ['enrolements-impression'] })}
-                className="text-slate-400 hover:text-slate-600 transition"
-                title="Actualiser"
+            <div className="px-4 py-3 border-b bg-slate-50 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-slate-700">File d'attente</span>
+                <button
+                  onClick={() => qc.invalidateQueries({ queryKey: ['enrolements-impression'] })}
+                  className="text-slate-400 hover:text-slate-600 transition"
+                  title="Actualiser"
+                >
+                  <RefreshCw size={14} />
+                </button>
+              </div>
+              <select
+                value={ambassadeFilter}
+                onChange={(e) => setAmbassadeFilter(e.target.value)}
+                className="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
               >
-                <RefreshCw size={14} />
-              </button>
+                <option value="">Toutes les ambassades</option>
+                {ambassades?.map((a: any) => (
+                  <option key={a.id} value={a.id}>{a.nom} — {a.ville}</option>
+                ))}
+              </select>
             </div>
 
             {loadingFile ? (
