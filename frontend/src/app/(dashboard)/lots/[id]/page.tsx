@@ -3,6 +3,9 @@
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import api from '@/lib/api'
 import { downloadFile } from '@/lib/download'
 import toast from 'react-hot-toast'
@@ -10,7 +13,7 @@ import Link from 'next/link'
 import {
   ArrowLeft, Package, MapPin, Truck, QrCode, FileDown,
   CheckCircle, Send, AlertTriangle, Clock, History,
-  RefreshCw, ChevronDown, ChevronUp,
+  RefreshCw, ChevronDown, ChevronUp, Pencil, Trash2, Plus, X,
 } from 'lucide-react'
 import { formatDate, formatDateTime } from '@/lib/utils'
 import { useAuthStore, hasPermission } from '@/stores/authStore'
@@ -37,6 +40,123 @@ function InfoCard({ label, children }: { label: string; children: React.ReactNod
     <div className="bg-slate-50 rounded-lg p-3">
       <p className="text-xs text-slate-500 mb-0.5">{label}</p>
       <div className="text-sm font-medium text-slate-800">{children}</div>
+    </div>
+  )
+}
+
+// ── Modale de modification (brouillon uniquement) ─────────────────────────────
+
+const editSchema = z.object({
+  transporteur_id:        z.number({ message: 'Transporteur obligatoire' }).min(1, 'Transporteur obligatoire'),
+  date_expedition:        z.string().optional(),
+  date_reception_prevue:  z.string().optional(),
+  reference_suivi:        z.string().max(150).optional(),
+  notes:                  z.string().max(1000).optional(),
+})
+
+type EditFormData = z.infer<typeof editSchema>
+
+function EditLotModal({ lot, onClose }: { lot: any; onClose: () => void }) {
+  const qc = useQueryClient()
+
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<EditFormData>({
+    resolver: zodResolver(editSchema),
+    defaultValues: {
+      transporteur_id:       lot.transporteur?.id,
+      date_expedition:       lot.date_expedition ?? '',
+      date_reception_prevue: lot.date_reception_prevue ?? '',
+      reference_suivi:       lot.reference_suivi ?? '',
+      notes:                 lot.notes ?? '',
+    },
+  })
+
+  const { data: transporteurs } = useQuery({
+    queryKey: ['transporteurs-select'],
+    queryFn:  () => api.get('/transporteurs').then(r => r.data?.data ?? r.data),
+  })
+
+  const update = useMutation({
+    mutationFn: (data: EditFormData) => api.put(`/lots/${lot.id}`, data),
+    onSuccess: () => {
+      toast.success('Lot mis à jour.')
+      qc.invalidateQueries({ queryKey: ['lot', String(lot.id)] })
+      onClose()
+    },
+    onError: (e: any) => {
+      const msg = e.response?.data?.message || Object.values(e.response?.data?.errors ?? {})[0] || 'Erreur lors de la mise à jour.'
+      toast.error(String(msg))
+    },
+  })
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between px-6 py-4 border-b">
+          <h2 className="font-semibold text-slate-800 flex items-center gap-2">
+            <Pencil size={16} className="text-[#1a5276]" /> Modifier le lot {lot.reference}
+          </h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+            <X size={18} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit((d) => update.mutate(d))} className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <Truck size={14} className="inline mr-1 text-[#1a5276]" />
+              Transporteur <span className="text-red-500">*</span>
+            </label>
+            <select
+              defaultValue={lot.transporteur?.id ?? ''}
+              onChange={(e) => setValue('transporteur_id', Number(e.target.value))}
+              className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]">
+              <option value="" disabled>Sélectionner un transporteur...</option>
+              {transporteurs
+                ?.filter((t: any) => t.is_active !== false || t.id === lot.transporteur?.id)
+                ?.map((t: any) => (
+                  <option key={t.id} value={t.id}>{t.nom} ({t.type ?? 'Standard'})</option>
+                ))}
+            </select>
+            {errors.transporteur_id && <p className="text-red-500 text-xs mt-1">{errors.transporteur_id.message}</p>}
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Date d'expédition</label>
+              <input type="date" {...register('date_expedition')}
+                className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Réception prévue</label>
+              <input type="date" {...register('date_reception_prevue')}
+                className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Référence de suivi transporteur</label>
+            <input type="text" {...register('reference_suivi')} placeholder="ex: DHL-2024-001234"
+              className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Notes internes (optionnel)</label>
+            <textarea {...register('notes')} rows={3} placeholder="Observations, instructions particulières..."
+              className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276] resize-none" />
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={onClose}
+              className="flex-1 border border-slate-300 text-slate-600 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50">
+              Annuler
+            </button>
+            <button type="submit" disabled={update.isPending}
+              className="flex-1 bg-[#1a5276] text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-[#154360] disabled:opacity-50 flex items-center justify-center gap-2">
+              {update.isPending ? <><RefreshCw size={15} className="animate-spin" /> Enregistrement…</> : 'Enregistrer'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
@@ -152,6 +272,7 @@ export default function LotDetailPage() {
 
   const [tab,         setTab]         = useState<'passeports' | 'qr' | 'historique'>('passeports')
   const [showDetails, setShowDetails] = useState(false)
+  const [showEdit,    setShowEdit]    = useState(false)
 
   const { data: lot, isLoading } = useQuery({
     queryKey: ['lot', lotId],
@@ -174,6 +295,16 @@ export default function LotDetailPage() {
     mutationFn: () => api.post(`/lots/${lotId}/expedier`),
     onSuccess:  () => { toast.success('Lot expédié — QR code et bordereau générés'); qc.invalidateQueries({ queryKey: ['lot', lotId] }) },
     onError:    (e: any) => toast.error(e.response?.data?.message || 'Erreur'),
+  })
+
+  const removePasseport = useMutation({
+    mutationFn: (passeportId: number) => api.delete(`/lots/${lotId}/passeports/${passeportId}`),
+    onSuccess:  () => {
+      toast.success('Passeport retiré du lot.')
+      qc.invalidateQueries({ queryKey: ['lot', lotId] })
+      qc.invalidateQueries({ queryKey: ['lot-passeports', lotId] })
+    },
+    onError: (e: any) => toast.error(e.response?.data?.message || 'Erreur lors du retrait.'),
   })
 
   if (isLoading) return (
@@ -217,6 +348,12 @@ export default function LotDetailPage() {
               {lot.statut_label ?? lot.statut}
             </span>
             {/* Actions */}
+            {lot.statut === 'brouillon' && canUpdate && (
+              <button onClick={() => setShowEdit(true)}
+                className="flex items-center gap-1.5 border text-slate-600 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
+                <Pencil size={13} /> Modifier
+              </button>
+            )}
             {lot.statut === 'brouillon' && canValidate && (
               <button onClick={() => valider.mutate()} disabled={valider.isPending}
                 className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50">
@@ -326,6 +463,15 @@ export default function LotDetailPage() {
         {/* Passeports */}
         {tab === 'passeports' && (
           <>
+            {lot.statut === 'brouillon' && canUpdate && (passeports?.data?.length ?? 0) > 0 && (
+              <div className="flex justify-end mb-3">
+                <Link href={`/lots/${lot.id}/ajouter`}
+                  className="flex items-center gap-1.5 text-sm text-[#1a5276] hover:underline">
+                  <Plus size={14} /> Ajouter des passeports
+                </Link>
+              </div>
+            )}
+
             {loadingPasseports ? (
               <div className="flex justify-center p-8">
                 <div className="w-7 h-7 border-2 border-[#1a5276] border-t-transparent rounded-full animate-spin" />
@@ -344,8 +490,9 @@ export default function LotDetailPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b bg-slate-50">
-                    {['N° Passeport', 'Titulaire', 'Date naissance', 'Statut', 'Réception', 'Note'].map(h => (
-                      <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase">{h}</th>
+                    {['N° Passeport', 'Titulaire', 'Date naissance', 'Statut', 'Réception', 'Note',
+                      ...(lot.statut === 'brouillon' && canUpdate ? [''] : [])].map((h, i) => (
+                      <th key={h || i} className="px-4 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase">{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -370,6 +517,21 @@ export default function LotDetailPage() {
                       <td className="px-4 py-2.5 text-xs text-slate-400 max-w-[200px] truncate">
                         {p.pivot?.notes ?? '—'}
                       </td>
+                      {lot.statut === 'brouillon' && canUpdate && (
+                        <td className="px-4 py-2.5 text-right">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (confirm(`Retirer le passeport ${p.numero} de ce lot ?`)) {
+                                removePasseport.mutate(p.id)
+                              }
+                            }}
+                            disabled={removePasseport.isPending}
+                            className="text-slate-400 hover:text-red-500 disabled:opacity-50">
+                            <Trash2 size={14} />
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -384,6 +546,8 @@ export default function LotDetailPage() {
         {/* Historique */}
         {tab === 'historique' && <HistoriqueTab lotId={Number(lotId)} />}
       </div>
+
+      {showEdit && <EditLotModal lot={lot} onClose={() => setShowEdit(false)} />}
     </div>
   )
 }
