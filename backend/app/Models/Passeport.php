@@ -82,7 +82,7 @@ class Passeport extends Model
 
     protected $fillable = [
         'numero', 'reference_demande',
-        'nom_titulaire', 'prenom_titulaire', 'date_naissance',
+        'nom_titulaire', 'prenom_titulaire', 'date_naissance', 'duree_validite',
         'email_citoyen', 'telephone',
         'pays_destination_id', 'ambassade_destination_id',
         'date_impression', 'date_reception_mae',

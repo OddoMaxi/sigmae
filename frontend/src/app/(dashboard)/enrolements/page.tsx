@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import api from '@/lib/api'
-import { UserPlus, Search, X, Check, Fingerprint, FileText, Calendar, Phone, Mail, User } from 'lucide-react'
+import { UserPlus, Search, X, Check, Fingerprint, FileText, Calendar, Phone, Mail, User, ShieldCheck } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 // ── Schéma ────────────────────────────────────────────────────────────────────
@@ -15,6 +15,7 @@ const schema = z.object({
   prenom_titulaire: z.string().min(2, 'Minimum 2 caractères'),
   nom_titulaire:    z.string().min(2, 'Minimum 2 caractères'),
   date_naissance:   z.string().min(1, 'Date de naissance requise'),
+  duree_validite:   z.number({ message: 'Durée de validité requise' }).min(5, 'Durée de validité requise'),
   email_citoyen:    z.string().email('Email invalide').optional().or(z.literal('')),
   telephone:        z.string().optional(),
 })
@@ -63,7 +64,7 @@ export default function EnrolementPage() {
 
   // ── Formulaire ────────────────────────────────────────────────────────────
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormData>({
+  const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
 
@@ -179,6 +180,25 @@ export default function EnrolementPage() {
                 )}
               </div>
 
+              {/* Validité */}
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <ShieldCheck size={12} className="inline mr-1" />Validité *
+                </label>
+                <select
+                  onChange={(e) => setValue('duree_validite', Number(e.target.value))}
+                  defaultValue=""
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a5276]"
+                >
+                  <option value="" disabled>Sélectionner...</option>
+                  <option value={5}>5 ans</option>
+                  <option value={10}>10 ans</option>
+                </select>
+                {errors.duree_validite && (
+                  <p className="text-red-500 text-xs mt-0.5">{errors.duree_validite.message}</p>
+                )}
+              </div>
+
               {/* Téléphone */}
               <div>
                 <label className="block text-xs font-medium text-slate-600 mb-1">
@@ -258,7 +278,7 @@ export default function EnrolementPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b">
-                {['Demandeur', 'Date naissance', 'Référence demande', 'Contact', 'Enrôlé le', 'Statut'].map(h => (
+                {['Demandeur', 'Date naissance', 'Validité', 'Référence demande', 'Contact', 'Enrôlé le', 'Statut'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     {h}
                   </th>
@@ -277,6 +297,9 @@ export default function EnrolementPage() {
                     {e.date_naissance
                       ? new Date(e.date_naissance).toLocaleDateString('fr-FR')
                       : '—'}
+                  </td>
+                  <td className="px-4 py-3 text-slate-500 text-xs">
+                    {e.duree_validite ? `${e.duree_validite} ans` : '—'}
                   </td>
                   <td className="px-4 py-3">
                     <span className="font-mono text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-700">

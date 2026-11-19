@@ -90,6 +90,7 @@ class EnrolementController extends Controller
             'prenom_titulaire'         => $request->prenom_titulaire,
             'nom_titulaire'            => $request->nom_titulaire,
             'date_naissance'           => $request->date_naissance,
+            'duree_validite'           => $request->duree_validite,
             'email_citoyen'            => $request->email_citoyen,
             'telephone'                => $request->telephone,
             'ambassade_destination_id' => $user->ambassade_id,

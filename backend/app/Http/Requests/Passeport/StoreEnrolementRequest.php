@@ -17,6 +17,7 @@ class StoreEnrolementRequest extends FormRequest
             'prenom_titulaire' => ['required', 'string', 'min:2', 'max:100', 'regex:' . self::NAME_REGEX],
             'nom_titulaire'    => ['required', 'string', 'min:2', 'max:100', 'regex:' . self::NAME_REGEX],
             'date_naissance'   => ['required', 'date', 'before:today'],
+            'duree_validite'   => ['required', 'integer', 'in:5,10'],
             'email_citoyen'    => ['nullable', 'email', 'max:200'],
             'telephone'        => ['nullable', 'string', 'max:30'],
         ];
@@ -31,6 +32,8 @@ class StoreEnrolementRequest extends FormRequest
             'nom_titulaire.regex'       => 'Le nom ne peut contenir que des lettres, espaces, apostrophes et tirets.',
             'date_naissance.required'   => 'La date de naissance est obligatoire.',
             'date_naissance.before'     => 'La date de naissance doit être dans le passé.',
+            'duree_validite.required'   => 'La durée de validité est obligatoire.',
+            'duree_validite.in'         => 'La durée de validité doit être de 5 ou 10 ans.',
             'email_citoyen.email'       => 'L\'adresse email n\'est pas valide.',
         ];
     }
